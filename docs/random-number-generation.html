@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Shang-Chieh" />
 
 
-<meta name="date" content="2023-03-27" />
+<meta name="date" content="2023-04-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,7 +151,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.2" data-path="random-number-generation.html"><a href="random-number-generation.html#quality-of-prngs"><i class="fa fa-check"></i><b>2.1.2</b> Quality of PRNGs</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="random-number-generation.html"><a href="random-number-generation.html#the-inverse-transform-method"><i class="fa fa-check"></i><b>2.2</b> The inverse transform method</a></li>
-<li class="chapter" data-level="2.3" data-path="random-number-generation.html"><a href="random-number-generation.html#rejection-sampling"><i class="fa fa-check"></i><b>2.3</b> Rejection sampling</a></li>
+<li class="chapter" data-level="2.3" data-path="random-number-generation.html"><a href="random-number-generation.html#rejection-sampling"><i class="fa fa-check"></i><b>2.3</b> Rejection sampling</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="random-number-generation.html"><a href="random-number-generation.html#basic-rejection-sampling"><i class="fa fa-check"></i><b>2.3.1</b> Basic Rejection Sampling</a></li>
+</ul></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -189,7 +192,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 s_2\xrightarrow{g}X_2\\
 s_3\xrightarrow{g}X_3\\
 \vdots\]</span></p>
-<p>where <span class="math inline">\(s_i\in S.\)</span> Here, <span class="math inline">\(S\)</span> is called the state space, <span class="math inline">\(f:S\to S\)</span> is called the mixing function and <span class="math inline">\(g:S\to \mathscr R\)</span> is called the output function.</p>
+<p>where <span class="math inline">\(s_i\in S.\)</span> Here, <span class="math inline">\(S\)</span> is called the state space, <span class="math inline">\(f:S\to S\)</span> is called the mixing function and <span class="math inline">\(g:S\to \mathcal R\)</span> is called the output function.</p>
 <p>Note that <span class="math inline">\(s_0\)</span> is never computed, <span class="math inline">\(s_0\)</span> is called the seed.</p>
 <p><strong>Linear congruential generator (LCG)</strong></p>
 <p><span class="math inline">\(mod \quad m\)</span> means that we divide by m and take the remainder(對m取餘)</p>
@@ -359,10 +362,50 @@ But fortunately, we can have extremely large period in R.</p>
 </div>
 <div id="the-inverse-transform-method" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> The inverse transform method<a href="random-number-generation.html#the-inverse-transform-method" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Aim: Convert <span class="math inline">\(U\sim U(0,1)\)</span> into X from a given distribution on <span class="math inline">\(\mathcal R\)</span></p>
+<div class="definition">
+<p><span id="def:unlabeled-div-4" class="definition"><strong>Definition 2.3  </strong></span>The cumulative distribution function (cdf) is given by <span class="math display">\[F(a)=P(X \le a)\]</span></p>
+<p>Moreover, <span class="math display">\[P(X\in (a,b])=P(X \le b)-P(X\le a)=F(b)-F(a)\]</span></p>
+</div>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-5" class="proposition"><strong>Proposition 2.1  </strong></span><span class="math display">\[U \sim U(0,1), X:=F^{-1}(u)\\
+\implies X \text{ has cdf } F\]</span></p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-6" class="proof"><em>Proof</em>. </span><span class="math inline">\(F^{-1}(u):=inf\{x\in \mathcal R|F(x)\ge u \}\)</span></p>
+<p>Let <span class="math inline">\(U\sim U(0,1), X=F^{-1}(u)\)</span>. Then</p>
+<p><span class="math display">\[P(X \le a)=P(F^{-1}(u)\le a)\\
+=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
+=P(F(a)\ge u)\\
+=P(u\le F(a))\\
+=\frac{F(a)-0}{1-0}\\
+=F(a)\]</span></p>
+<p>We use the facts that <span class="math inline">\(inf\{x\in \mathcal R | F(x)\ge u\}\le a\iff F(a)\ge u\)</span> and <span class="math inline">\(U\sim U(0,1)\)</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-7" class="example"><strong>Example 2.2  </strong></span>Consider <span class="math inline">\(X\sim Exp(\lambda)\)</span></p>
+<p><span class="math inline">\(f(x)=\begin{cases} \lambda e^{-\lambda x} &amp; x\ge 0 \\ 0 &amp; x&lt;0 \end{cases}\)</span></p>
+<p><span class="math inline">\(\implies F(a)=P(X\le a)=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}\)</span></p>
+<p><span class="math inline">\(u=F(x)=1-e^{-\lambda x}\\ \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}\)</span></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="random-number-generation.html#cb35-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb35-2"><a href="random-number-generation.html#cb35-2" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(N)</span>
+<span id="cb35-3"><a href="random-number-generation.html#cb35-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb35-4"><a href="random-number-generation.html#cb35-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>U)<span class="sc">/</span>lambda</span>
+<span id="cb35-5"><a href="random-number-generation.html#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb35-6"><a href="random-number-generation.html#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">50</span>)</span>
+<span id="cb35-7"><a href="random-number-generation.html#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="random-number-generation.html#cb35-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(X), <span class="at">length.out=</span><span class="dv">100</span>)</span>
+<span id="cb35-9"><a href="random-number-generation.html#cb35-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-10"><a href="random-number-generation.html#cb35-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">dexp</span>(x, lambda), <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
 </div>
 <div id="rejection-sampling" class="section level2 hasAnchor" number="2.3">
 <h2><span class="header-section-number">2.3</span> Rejection sampling<a href="random-number-generation.html#rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="basic-rejection-sampling" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> Basic Rejection Sampling<a href="random-number-generation.html#basic-rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 
+</div>
 </div>
 </div>
             </section>

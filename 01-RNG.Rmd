@@ -20,7 +20,7 @@ s_2\xrightarrow{g}X_2\\
 s_3\xrightarrow{g}X_3\\
 \vdots$$
 
-where $s_i\in S.$ Here, $S$ is called the state space, $f:S\to S$ is called the mixing function and $g:S\to \mathscr R$ is called the output function.
+where $s_i\in S.$ Here, $S$ is called the state space, $f:S\to S$ is called the mixing function and $g:S\to \mathcal R$ is called the output function.
 
 Note that $s_0$ is never computed, $s_0$ is called the seed.
 
@@ -253,4 +253,70 @@ set.seed(1) # always get the same output
 
 ## The inverse transform method
 
+Aim: Convert $U\sim U(0,1)$ into X from a given distribution on $\mathcal R$
+
+:::{.definition}
+
+The cumulative distribution function (cdf) is given by $$F(a)=P(X \le a)$$
+
+Moreover, $$P(X\in (a,b])=P(X \le b)-P(X\le a)=F(b)-F(a)$$
+
+:::
+ 
+
+:::{.proposition}
+
+
+$$U \sim U(0,1), X:=F^{-1}(u)\\
+\implies X \text{ has cdf } F$$
+
+:::
+
+:::{.proof}
+
+$F^{-1}(u):=inf\{x\in \mathcal R|F(x)\ge u  \}$
+
+Let $U\sim U(0,1), X=F^{-1}(u)$. Then
+
+$$P(X \le a)=P(F^{-1}(u)\le a)\\
+=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
+=P(F(a)\ge u)\\
+=P(u\le F(a))\\
+=\frac{F(a)-0}{1-0}\\
+=F(a)$$
+
+We use the facts that $inf\{x\in \mathcal R | F(x)\ge u\}\le a\iff F(a)\ge u$ and $U\sim U(0,1)$
+
+:::
+
+:::{.example}
+
+Consider $X\sim Exp(\lambda)$
+
+$f(x)=\begin{cases} \lambda e^{-\lambda x} & x\ge 0 \\ 0 & x<0 \end{cases}$
+
+$\implies F(a)=P(X\le a)=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}$
+
+$u=F(x)=1-e^{-\lambda x}\\ \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}$
+
+
+```{r}
+N <- 1e5
+U <- runif(N)
+lambda <- 2
+X <- -log(1-U)/lambda
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+hist(X, main=NULL, prob=TRUE, breaks=50)
+
+x <- seq(0, max(X), length.out=100)
+
+lines(x, dexp(x, lambda), col="red")
+```
+
+:::
+
+
 ## Rejection sampling
+
+### Basic Rejection Sampling
+

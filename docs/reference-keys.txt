@@ -1,6 +1,9 @@
 def:unlabeled-div-1
 exm:unlabeled-div-2
 def:unlabeled-div-3
+def:unlabeled-div-4
+prp:unlabeled-div-5
+exm:unlabeled-div-7
 about
 random-number-generation
 pseudo-random-number-generators
@@ -8,3 +11,4 @@ structure-of-prng-in-computer
 quality-of-prngs
 the-inverse-transform-method
 rejection-sampling
+basic-rejection-sampling

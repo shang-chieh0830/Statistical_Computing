@@ -1,7 +1,7 @@
 --- 
 title: "Statistical Computing"
 author: "Shang-Chieh"
-date: "2023-03-27"
+date: "2023-04-07"
 site: bookdown::bookdown_site
 documentclass: book
 bibliography: [book.bib, packages.bib]
