@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Shang-Chieh" />
 
 
-<meta name="date" content="2023-04-07" />
+<meta name="date" content="2023-04-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -404,6 +404,161 @@ But fortunately, we can have extremely large period in R.</p>
 <h2><span class="header-section-number">2.3</span> Rejection sampling<a href="random-number-generation.html#rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="basic-rejection-sampling" class="section level3 hasAnchor" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Basic Rejection Sampling<a href="random-number-generation.html#basic-rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For n=1,2,3,…:</p>
+<p>Generate <span class="math inline">\(X_n \sim g\)</span> ( g is the proposal distribution)</p>
+<p>Generate <span class="math inline">\(U_n\sim U(0,1)\)</span></p>
+<p><span class="math display">\[\begin{cases}output\quad X_n (accept\quad X_n), &amp; \text{if } U_n\le p=p(X_n)\\
+  ignore\quad X_n(reject \quad X_n), &amp; o.w.\end{cases}\]</span></p>
+<p>Note that <span class="math inline">\(P(U\le p)=p, \forall p\in[0,1]\)</span>, so <span class="math inline">\(P(U_n\le p=p(X_n))=p=p(X_n)\)</span>, i.e. we accept <span class="math inline">\(X_n\)</span> with probability <span class="math inline">\(p=p(X_n)\)</span>. Here <span class="math inline">\(p(X_n)\)</span> is to emphasize <span class="math inline">\(p\)</span> depends on <span class="math inline">\(X_n\)</span>, <span class="math inline">\(p(X_n)\)</span> is not the pdf of <span class="math inline">\(X_n\)</span></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="random-number-generation.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first experiment about rejection sampling</span></span>
+<span id="cb36-2"><a href="random-number-generation.html#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="random-number-generation.html#cb36-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb36-4"><a href="random-number-generation.html#cb36-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb36-5"><a href="random-number-generation.html#cb36-5" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb36-6"><a href="random-number-generation.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i<span class="sc">&lt;=</span>N){</span>
+<span id="cb36-7"><a href="random-number-generation.html#cb36-7" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb36-8"><a href="random-number-generation.html#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="random-number-generation.html#cb36-9" aria-hidden="true" tabindex="-1"></a>  X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb36-10"><a href="random-number-generation.html#cb36-10" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> i<span class="sc">+</span><span class="dv">1</span>  </span>
+<span id="cb36-11"><a href="random-number-generation.html#cb36-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb36-12"><a href="random-number-generation.html#cb36-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-13"><a href="random-number-generation.html#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="random-number-generation.html#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb36-15"><a href="random-number-generation.html#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span>
+<span id="cb36-16"><a href="random-number-generation.html#cb36-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-17"><a href="random-number-generation.html#cb36-17" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb36-18"><a href="random-number-generation.html#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">dnorm</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="random-number-generation.html#cb37-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb37-2"><a href="random-number-generation.html#cb37-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb37-3"><a href="random-number-generation.html#cb37-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb37-4"><a href="random-number-generation.html#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i<span class="sc">&lt;=</span>N){</span>
+<span id="cb37-5"><a href="random-number-generation.html#cb37-5" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb37-6"><a href="random-number-generation.html#cb37-6" aria-hidden="true" tabindex="-1"></a>  U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb37-7"><a href="random-number-generation.html#cb37-7" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Xi<span class="sc">&lt;</span><span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>) <span class="co"># scale down the negative part</span></span>
+<span id="cb37-8"><a href="random-number-generation.html#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(U<span class="sc">&lt;=</span>p){</span>
+<span id="cb37-9"><a href="random-number-generation.html#cb37-9" aria-hidden="true" tabindex="-1"></a>    X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb37-10"><a href="random-number-generation.html#cb37-10" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> i<span class="sc">+</span><span class="dv">1</span>  </span>
+<span id="cb37-11"><a href="random-number-generation.html#cb37-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-12"><a href="random-number-generation.html#cb37-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-13"><a href="random-number-generation.html#cb37-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-14"><a href="random-number-generation.html#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="random-number-generation.html#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb37-16"><a href="random-number-generation.html#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span>
+<span id="cb37-17"><a href="random-number-generation.html#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="random-number-generation.html#cb37-18" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb37-19"><a href="random-number-generation.html#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">dnorm</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Let <span class="math inline">\(\phi(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\)</span> be the std. normal pdf.</p>
+<p>In the above codes, <code>p &lt;- ifelse(Xi&lt;0, 0.5, 1)</code> scale down the negative part by <code>1/2</code>, i.e. the area under the histogram is now 1/4 (negative part) + 1/2 (positive part) = 3/4, which is no longer 1.</p>
+<p><code>p &lt;- ifelse(Xi&lt;0, 0.5, 1)</code>, you can think of this as <span class="math inline">\(p(x)\phi(x)=\begin{cases} 1\phi(x), &amp; \text{if positive part}\\ \frac{1}{2}\phi(x), &amp; \text{if negative part} \end{cases}\)</span></p>
+<p>But now, <span class="math inline">\(p(x)\phi(x)\)</span> is not a probability distribution, because the area under <span class="math inline">\(p(x)\phi(x)\)</span> is 3/4. To make this be a probability distribution again, we will divide 3/4, i.e. <span class="math inline">\(\frac{1}{3/4}p(x)\phi(x)=\frac{1}{z}p(x)g(x)\)</span>, where <span class="math inline">\(z=3/4, g(x)=\phi(x)\)</span></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="random-number-generation.html#cb38-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb38-2"><a href="random-number-generation.html#cb38-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb38-3"><a href="random-number-generation.html#cb38-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb38-4"><a href="random-number-generation.html#cb38-4" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb38-5"><a href="random-number-generation.html#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i<span class="sc">&lt;=</span>N){</span>
+<span id="cb38-6"><a href="random-number-generation.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb38-7"><a href="random-number-generation.html#cb38-7" aria-hidden="true" tabindex="-1"></a>  count <span class="ot">&lt;-</span> count<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb38-8"><a href="random-number-generation.html#cb38-8" aria-hidden="true" tabindex="-1"></a>  U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb38-9"><a href="random-number-generation.html#cb38-9" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(Xi<span class="sc">&lt;</span><span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>) <span class="co"># scale down the negative part</span></span>
+<span id="cb38-10"><a href="random-number-generation.html#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(U<span class="sc">&lt;=</span>p){</span>
+<span id="cb38-11"><a href="random-number-generation.html#cb38-11" aria-hidden="true" tabindex="-1"></a>    X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb38-12"><a href="random-number-generation.html#cb38-12" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> i<span class="sc">+</span><span class="dv">1</span>  </span>
+<span id="cb38-13"><a href="random-number-generation.html#cb38-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb38-14"><a href="random-number-generation.html#cb38-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-15"><a href="random-number-generation.html#cb38-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb38-16"><a href="random-number-generation.html#cb38-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-17"><a href="random-number-generation.html#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of required proposals we have </span></span>
+<span id="cb38-18"><a href="random-number-generation.html#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="co"># to get N accepted samples</span></span>
+<span id="cb38-19"><a href="random-number-generation.html#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;count =&quot;</span>, count, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## count = 13278</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="random-number-generation.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb40-2"><a href="random-number-generation.html#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks =</span> <span class="dv">50</span>)</span>
+<span id="cb40-3"><a href="random-number-generation.html#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="random-number-generation.html#cb40-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb40-5"><a href="random-number-generation.html#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">ifelse</span>(x<span class="sc">&lt;</span><span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">dnorm</span>(x) <span class="sc">*</span> <span class="dv">4</span><span class="sc">/</span><span class="dv">3</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-8" class="proposition"><strong>Proposition 2.2  </strong></span>Given proposals <span class="math inline">\(X_n\sim g\)</span>, acceptance probability <span class="math inline">\(p(x)\in [0,1]\)</span></p>
+<p>Let <span class="math inline">\(N_k=\)</span> index of the kth accepted proposal</p>
+<p>(For example, <span class="math inline">\(X_1, X_2, X_3, X_4, ...\)</span>, say <span class="math inline">\(X_3\)</span> is rejected, then <span class="math inline">\(X_{N_1}=X_1, X_{N_2}=X_2, X_{N_3}=X_4,...\)</span>)</p>
+<p>Then</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>the accepted samples have density <span class="math display">\[f(x)=\frac{1}{z}p(x)g(x)\]</span>, i.e. <span class="math inline">\((X_{N_k})\)</span> is an i.i.d. sequence with density f.</p></li>
+<li><p>Each sample is accepted with probability <span class="math inline">\(z\)</span>. The number of required proposals is geometrically distributed with mean <span class="math inline">\(\frac{1}{z}\)</span>.</p></li>
+</ol>
+<p>Note that <span class="math inline">\(1=\int_{\mathcal R} \frac{1}{z}p(x)g(x)dx=\frac{1}{z}\int_{\mathcal R} p(x)g(x)dx\\ \implies z=\int p(x)g(x)dx\)</span></p>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-9" class="proof"><em>Proof</em>. </span>The probability of accepting <span class="math inline">\(X_n\)</span> is</p>
+<p><span class="math display">\[P(X_n accepted)=P(U_n\le p(X_n))=\\
+=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
+=\int_{\mathcal R}p(x)g(x)dx=z\]</span></p>
+<p>Note that <span class="math inline">\(p(x)=\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\)</span> and <span class="math inline">\(\boldsymbol 1_{\{U\le p(X)\}}=\begin{cases}1, &amp; \text{if } U_n\le p(X_n)\\ 0, &amp; o.w. \end{cases}\)</span></p>
+<p>Now, we want to show <span class="math inline">\(P(X_{N_k}\in A)=\int_{A}f(x)dx\)</span></p>
+<p><span class="math display">\[P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}&gt;p(X_{n+1}),...,\\ U_{n+m-1}&gt;p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1}),..., U_{n+m-1}&gt;p(X_{n+m-1})\\, U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\]</span></p>
+<p>The last equation come about b/c of independence.</p>
+<p>Now, observe:</p>
+<p><span class="math inline">\(P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)=1-z\)</span></p>
+<p><span class="math inline">\(\vdots\)</span></p>
+<p><span class="math inline">\(P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)=1-z\)</span></p>
+<p><span class="math inline">\(P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X), X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}du\quad \boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{\mathcal R}p(x)\boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{A}p(x)g(x)dx\\\)</span></p>
+<p>Hence, <span class="math display">\[P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
+=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
+=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
+=\int_{A}\frac{1}{z}p(x)g(x)dx\\
+=\int_{A}f(x)dx\]</span>, which is true independent of n</p>
+<p>Hence <span class="math inline">\(P(X_{N_k}\in A)=\int_{A}f(x)dx\)</span>, i.e. <span class="math inline">\(X_{N_k}\)</span> has desity f.</p>
+<p>Recall the fact that <span class="math inline">\(\sum_{m=0}^{\infty}a^m=\frac{1}{1-a},\forall |a|&lt;1\)</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-10" class="example"><strong>Example 2.3  </strong></span>Consider <span class="math inline">\(X_n\sim U(-1,+1)\implies g(x)=\boldsymbol 1_{[-1,+1]}\times \frac{1}{2}\)</span>, and <span class="math inline">\(p(x)=\sqrt{1-x^2}\)</span>, which is the upper half of the unit circle.</p>
+<p>Then <span class="math inline">\(f(x)=\frac{1}{z}p(x)g(x)=\frac{1}{z}\times \begin{cases} \sqrt{1-x^2}\times \frac{1}{2}, &amp; \forall x\in [-1,+1]\\ 0, &amp; \forall x \notin[-1,+1] \end{cases}\)</span></p>
+<p>So, <span class="math inline">\(z=\int_{-1}^{+1}p(x)g(x)dx=\int_{-1}^{+1}\sqrt{1-x^2}\times 1/2dx=1/2\int_{-1}^{+1}\sqrt{1-x^2}dx\\=1/2\times \frac{1}{2}\pi1^2\\=\pi/4\)</span></p>
+<p>This implies the accepted samples have density
+<span class="math display">\[f(x)=\begin{cases}2/\pi\sqrt{1-x^2} &amp; \forall x\in [-1,+1]\\0 &amp; o.w. \end{cases}\]</span></p>
+<p>In fact, this distribution f(x) is the so-called Wigner semicircle distribution.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="random-number-generation.html#cb41-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb41-2"><a href="random-number-generation.html#cb41-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb41-3"><a href="random-number-generation.html#cb41-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb41-4"><a href="random-number-generation.html#cb41-4" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb41-5"><a href="random-number-generation.html#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i<span class="sc">&lt;=</span>N){</span>
+<span id="cb41-6"><a href="random-number-generation.html#cb41-6" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)</span>
+<span id="cb41-7"><a href="random-number-generation.html#cb41-7" aria-hidden="true" tabindex="-1"></a>  count <span class="ot">&lt;-</span> count<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb41-8"><a href="random-number-generation.html#cb41-8" aria-hidden="true" tabindex="-1"></a>  U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb41-9"><a href="random-number-generation.html#cb41-9" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>Xi<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb41-10"><a href="random-number-generation.html#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(U<span class="sc">&lt;=</span>p){</span>
+<span id="cb41-11"><a href="random-number-generation.html#cb41-11" aria-hidden="true" tabindex="-1"></a>    X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb41-12"><a href="random-number-generation.html#cb41-12" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> i<span class="sc">+</span><span class="dv">1</span>  </span>
+<span id="cb41-13"><a href="random-number-generation.html#cb41-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-14"><a href="random-number-generation.html#cb41-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-15"><a href="random-number-generation.html#cb41-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb41-16"><a href="random-number-generation.html#cb41-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-17"><a href="random-number-generation.html#cb41-17" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of required proposals we have </span></span>
+<span id="cb41-18"><a href="random-number-generation.html#cb41-18" aria-hidden="true" tabindex="-1"></a><span class="co"># to get N accepted samples</span></span>
+<span id="cb41-19"><a href="random-number-generation.html#cb41-19" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;count =&quot;</span>, count, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## count = 12732</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="random-number-generation.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb43-2"><a href="random-number-generation.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">prob=</span><span class="cn">TRUE</span>,<span class="at">asp=</span><span class="dv">1</span>)</span>
+<span id="cb43-3"><a href="random-number-generation.html#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="random-number-generation.html#cb43-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="at">length.out=</span> <span class="dv">100</span>)</span>
+<span id="cb43-5"><a href="random-number-generation.html#cb43-5" aria-hidden="true" tabindex="-1"></a>f.of.x <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">/</span>pi <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span>) <span class="sc">*</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb43-6"><a href="random-number-generation.html#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, f.of.x, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="random-number-generation.html#cb44-1" aria-hidden="true" tabindex="-1"></a>z<span class="ot">=</span>pi<span class="sc">/</span><span class="dv">4</span></span>
+<span id="cb44-2"><a href="random-number-generation.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The number of required proposals is geometrically distributed</span></span>
+<span id="cb44-3"><a href="random-number-generation.html#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># with mean 1/z</span></span>
+<span id="cb44-4"><a href="random-number-generation.html#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="random-number-generation.html#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span>z</span></code></pre></div>
+<pre><code>## [1] 1.27324</code></pre>
+</div>
 
 </div>
 </div>

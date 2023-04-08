@@ -4,6 +4,8 @@ def:unlabeled-div-3
 def:unlabeled-div-4
 prp:unlabeled-div-5
 exm:unlabeled-div-7
+prp:unlabeled-div-8
+exm:unlabeled-div-10
 about
 random-number-generation
 pseudo-random-number-generators

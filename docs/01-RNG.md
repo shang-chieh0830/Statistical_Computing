@@ -424,5 +424,245 @@ lines(x, dexp(x, lambda), col="red")
 
 ## Rejection sampling
 
+
 ### Basic Rejection Sampling
 
+For n=1,2,3,...:
+  
+  Generate $X_n \sim g$ ( g is the proposal distribution) 
+  
+  Generate $U_n\sim U(0,1)$
+  
+  $$\begin{cases}output\quad X_n (accept\quad X_n), & \text{if } U_n\le p=p(X_n)\\
+  ignore\quad X_n(reject \quad X_n), & o.w.\end{cases}$$ 
+  
+  Note that $P(U\le p)=p, \forall p\in[0,1]$, so $P(U_n\le p=p(X_n))=p=p(X_n)$, i.e. we accept $X_n$ with probability $p=p(X_n)$. Here $p(X_n)$ is to emphasize $p$ depends on $X_n$, $p(X_n)$ is not the pdf of $X_n$
+
+  
+
+```r
+# first experiment about rejection sampling
+
+N <- 10000
+X <- numeric(N)
+i <- 1
+while (i<=N){
+  Xi <- rnorm(1)
+
+  X[i] <- Xi
+  i <- i+1  
+  
+}
+
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+hist(X, main=NULL, prob=TRUE, breaks = 50)
+
+x <- seq(-4, 4, length.out=200)
+lines(x, dnorm(x), col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-21-1.png" width="672" />
+
+
+```r
+N <- 10000
+X <- numeric(N)
+i <- 1
+while (i<=N){
+  Xi <- rnorm(1)
+  U <- runif(1)
+  p <- ifelse(Xi<0, 0.5, 1) # scale down the negative part
+  if(U<=p){
+    X[i] <- Xi
+    i <- i+1  
+  }
+  
+}
+
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+hist(X, main=NULL, prob=TRUE, breaks = 50)
+
+x <- seq(-4, 4, length.out=200)
+lines(x, dnorm(x), col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-22-1.png" width="672" />
+
+Let $\phi(x)=\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}$ be the std. normal pdf. 
+
+In the above codes, `p <- ifelse(Xi<0, 0.5, 1)` scale down the negative part by `1/2`, i.e. the area under the histogram is now 1/4 (negative part) + 1/2 (positive part) = 3/4, which is no longer 1.
+
+`p <- ifelse(Xi<0, 0.5, 1)`, you can think of this as $p(x)\phi(x)=\begin{cases} 1\phi(x), & \text{if positive part}\\ \frac{1}{2}\phi(x), & \text{if negative part}    \end{cases}$
+
+But now, $p(x)\phi(x)$ is not a probability distribution, because the area under $p(x)\phi(x)$ is 3/4. To make this be a probability distribution again, we will divide 3/4, i.e. $\frac{1}{3/4}p(x)\phi(x)=\frac{1}{z}p(x)g(x)$, where $z=3/4, g(x)=\phi(x)$
+
+
+
+```r
+N <- 10000
+X <- numeric(N)
+i <- 1
+count <- 0
+while (i<=N){
+  Xi <- rnorm(1)
+  count <- count+1
+  U <- runif(1)
+  p <- ifelse(Xi<0, 0.5, 1) # scale down the negative part
+  if(U<=p){
+    X[i] <- Xi
+    i <- i+1  
+  }
+  
+}
+
+# The number of required proposals we have 
+# to get N accepted samples
+cat("count =", count, "\n")
+```
+
+```
+## count = 13278
+```
+
+```r
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+hist(X, main=NULL, prob=TRUE, breaks = 50)
+
+x <- seq(-4, 4, length.out=200)
+lines(x, ifelse(x<0, 0.5, 1) * dnorm(x) * 4/3, col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-23-1.png" width="672" />
+
+:::{.proposition}
+
+Given proposals $X_n\sim g$, acceptance probability $p(x)\in [0,1]$
+
+Let $N_k=$ index of the kth accepted proposal
+
+(For example, $X_1, X_2, X_3, X_4, ...$, say $X_3$ is rejected, then $X_{N_1}=X_1, X_{N_2}=X_2, X_{N_3}=X_4,...$)
+
+
+Then 
+
+a. the accepted samples have density $$f(x)=\frac{1}{z}p(x)g(x)$$, i.e. $(X_{N_k})$ is an i.i.d. sequence with density f.
+
+b. Each sample is accepted with probability $z$. The number of required proposals is geometrically distributed with mean $\frac{1}{z}$. 
+
+Note that $1=\int_{\mathcal R} \frac{1}{z}p(x)g(x)dx=\frac{1}{z}\int_{\mathcal R} p(x)g(x)dx\\ \implies z=\int p(x)g(x)dx$
+
+:::
+
+:::{.proof}
+
+The probability of accepting $X_n$ is 
+
+$$P(X_n accepted)=P(U_n\le p(X_n))=\\
+=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
+=\int_{\mathcal R}p(x)g(x)dx=z$$
+
+Note that $p(x)=\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du$ and $\boldsymbol 1_{\{U\le p(X)\}}=\begin{cases}1, & \text{if } U_n\le p(X_n)\\ 0, & o.w. \end{cases}$
+
+Now, we want to show $P(X_{N_k}\in A)=\int_{A}f(x)dx$
+
+$$P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}>p(X_{n+1}),...,\\ U_{n+m-1}>p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1}),..., U_{n+m-1}>p(X_{n+m-1})\\, U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)$$
+
+The last equation come about b/c of independence.
+
+
+Now, observe: 
+
+$P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)=1-z$
+
+$\vdots$
+
+$P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)=1-z$
+
+$P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X), X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}du\quad \boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{\mathcal R}p(x)\boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{A}p(x)g(x)dx\\$
+
+
+Hence, $$P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
+=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
+=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
+=\int_{A}\frac{1}{z}p(x)g(x)dx\\
+=\int_{A}f(x)dx$$, which is true independent of n
+
+Hence $P(X_{N_k}\in A)=\int_{A}f(x)dx$, i.e. $X_{N_k}$ has desity f.
+
+Recall the fact that $\sum_{m=0}^{\infty}a^m=\frac{1}{1-a},\forall |a|<1$
+
+:::
+
+
+:::{.example}
+
+Consider $X_n\sim U(-1,+1)\implies g(x)=\boldsymbol 1_{[-1,+1]}\times \frac{1}{2}$, and $p(x)=\sqrt{1-x^2}$, which is the upper half of the unit circle.
+
+Then $f(x)=\frac{1}{z}p(x)g(x)=\frac{1}{z}\times \begin{cases} \sqrt{1-x^2}\times \frac{1}{2}, & \forall x\in [-1,+1]\\ 0, & \forall x \notin[-1,+1] \end{cases}$
+
+So, $z=\int_{-1}^{+1}p(x)g(x)dx=\int_{-1}^{+1}\sqrt{1-x^2}\times 1/2dx=1/2\int_{-1}^{+1}\sqrt{1-x^2}dx\\=1/2\times \frac{1}{2}\pi1^2\\=\pi/4$
+
+This implies the accepted samples have density
+$$f(x)=\begin{cases}2/\pi\sqrt{1-x^2} & \forall x\in [-1,+1]\\0 & o.w. \end{cases}$$
+
+In fact, this distribution f(x) is the so-called Wigner semicircle distribution.
+
+
+```r
+N <- 10000
+X <- numeric(N)
+i <- 1
+count <- 0
+while (i<=N){
+  Xi <- runif(1,-1,1)
+  count <- count+1
+  U <- runif(1)
+  p <- sqrt(1-Xi^2)
+  if(U<=p){
+    X[i] <- Xi
+    i <- i+1  
+  }
+  
+}
+
+# The number of required proposals we have 
+# to get N accepted samples
+cat("count =", count, "\n")
+```
+
+```
+## count = 12732
+```
+
+```r
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+hist(X, main=NULL, prob=TRUE,asp=1)
+
+x <- seq(-1, 1, length.out= 100)
+f.of.x <- 4/pi * sqrt(1-x^2) * 1/2
+lines(x, f.of.x, col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-24-1.png" width="672" />
+
+
+```r
+z=pi/4
+# The number of required proposals is geometrically distributed
+# with mean 1/z
+
+1/z
+```
+
+```
+## [1] 1.27324
+```
+
+
+:::
