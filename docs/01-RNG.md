@@ -664,5 +664,222 @@ z=pi/4
 ## [1] 1.27324
 ```
 
+:::
+
+
+### Envelope Rejection Sampling
+
+Recall: In previous sections, we generate $X\sim g$ and $U\sim U(0,1)$. We accept X, if $U\le p(X)$.
+
+Also, accepted sample have density $f(x)=\frac{1}{z}p(x)g(x)$. Note that this implies $p(x)=constant\times\frac{f(x)}{g(x)}.$
+
+But $p(x)$ is a probability, so we must have $\frac{f(x)}{g(x)}$ to be bounded, i.e. $f(x)\le c\times g(x),\forall x$ for some constant c, so that we can adjust the constant term in $p(x)=constant\times\frac{f(x)}{g(x)}$ such that $p(x)\in [0,1].$ It turns out this constant term is $\frac{1}{c}$, i.e. $p(x)=\frac{1}{c}\frac{f(x)}{g(x)}$
+
+In this section, instead of finding what $f$ is, $f$ is already **GIVEN**, envelope rejection sampling can do this.
+
+$f(x)\le c\times g(x),\forall x$, is why we call it envelope rejection sampling.
+
+We will only require f to known up to a multiplicative constant (e.g. instead of knowing $f(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}$, we only need to know $f(x)=e^{-x^2/2}$), and we assume $f(x)\ge 0$ (don't need to integrate to 1.), to get samples from $$\tilde f(x)=\frac{1}{z_f}f(x), z_f=\int_{\mathcal R}f(x)dx$$
+
+
+:::{.proposition}
+
+Input: $f: \mathcal R \to [0,\infty)$ with $z_f=\int f(x)dx<\infty$, $g: \mathcal R \to [0,\infty)$ be a probability density, and a constant c such that $f(x)\le cg(x)$
+
+Generate $X\sim g$ and $U\sim U(0,1)$. We accept X, if $cg(x)\times U\le f(x)$ (you can write $U\le \frac{f(x)}{cg(x)}$, but make sure that the denominator ≠ 0)
+
+Then we have:
+
+a. Accepted samples have density $\tilde f(x)=\frac{1}{z_f}f(x)$
+
+b. Each proposal is accepted with probability $\frac{z_f}{c}$, and mean number of proposals per output is $\frac{c}{z_f}$
+
+
 
 :::
+
+:::{.proof}
+
+Each proposal is accepted with probability $p(x)=\begin{cases}  \frac{f(x)}{cg(x)} & \text{ if } g(x)>0 \\ 1 & \text{ if } g(x)=0 \end{cases}.$ Note that when $g(x)=0$, $cg(x)\times U=0\le f(x)$ always holds b/c we also assume $f(x)>0$, so we must accept X when $g(x)=0$
+
+
+By basic rejection sampling, the accepted samples have density $\frac{1}{z}p(x)g(x)=\begin{cases} \frac{1}{z}\frac{f(x)}{cg(x)}g(x)=f(x)/zc & \text{ if } g(x)>0\\ \frac{1}{z}\times 1\times g(x)=0 & \text{ if }g(x)=0\end{cases}$
+
+
+In fact, from the above we get $\frac{1}{z}p(x)g(x)=\frac{f(x)}{zc}$ no matter whether $g(x)=0$. This is b/c  $f(x)\le c\times g(x),\forall x$ so $g(x)=0\implies f(x)=0$
+
+
+$z=\int p(x)g(x)dx=\frac{1}{c}\int f(x)dx=\frac{z_f}{c}\\ \implies\frac{1}{z}p(x)g(x)=\frac{c}{z_f}\frac{f(x)}{c}=\frac{1}{z_f}f(x)=\tilde f(x)$
+
+
+Each sample is accepted with probability $z=z_f/c$
+
+:::
+
+
+:::{.example}
+
+Consider $f(x)=e^{-x^2/2}$, we want to find some constant c and proposal $g(x)$ so that $f(x)\le cg(x)$
+
+Since $f(x)$ is pretty similar to std. Normal, one can consider $g(x)$ to be double exponential distribution.
+
+For proposals: $X\sim \frac{\lambda}{2}e^{-\lambda|x|}=:g(x)$
+
+(Let's digress a little bit, how can we use inverse transform sampling to generate random samples from double exponential distribution? 
+
+Steps: 
+
+Generate $U\sim U(0,1)$, 
+
+Generate $Y=-\frac{log(1-U)}{\lambda}$ 
+
+(note that this is from exponential distribution, so it only has positive side of double exponential), 
+
+Generate $V\sim U(0,1)$ 
+
+(double exponential is symmetric to 0), 
+
+and let $X=\begin{cases}Y, & V\le1/2 \\-Y, & V>1/2 \end{cases}$
+
+)
+
+Now, can we find c with $f(x)\le cg(x), \forall x\in \mathcal R$, or equivalently, $f(x)/g(x)\le c, \forall x\in \mathcal R$?
+
+(The equivalence holds b/c g(x) is never 0 in this example)
+
+$\frac{f(x)}{g(x)}=\frac{e^{-x^2/2}}{\frac{\lambda}{2}e^{-\lambda |x|}}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}$
+
+Note that double exponential distribution is symmetric to 0, so we can simply consider the positive part ($x\ge 0$), so now we have $\frac{f(x)}{g(x)}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda x}$
+
+Also note that by F.O.C, we have $0=(-\frac{x^2}{2}+\lambda x)'=-x+\lambda \iff x=\lambda$, i.e. $-\frac{x^2}{2}+\lambda x$ has max at $x=\lambda$
+
+This gives $\frac{f(x)}{g(x)}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda x}\le \frac{2}{\lambda}e^{-\frac{\lambda^2}{2}+\lambda^2}=\frac{2}{\lambda}e^{\frac{\lambda^2}{2}}=:c$
+
+So yes, we found c with $f(x)/g(x)\le c, \forall x\in \mathcal R$
+
+Now, following the steps in envelope rejection sampling, we then:
+
+Generate $W\sim U(0,1)$, and accept X if $cg(x)\times W\le f(x) \\ \implies \frac{2}{\lambda}e^{\frac{\lambda^2}{2}}\frac{\lambda}{2}e^{-\lambda|x|}W\le e^{-x^2/2}\\ \implies W\le exp(-\frac{x^2}{2}+\lambda |x|-\frac{\lambda^2}{2})$
+
+
+
+```r
+# converting double-exponential to normal distribution
+# using rejection sampling
+
+lambda <- 1
+
+#non-normalized target distribution
+f <- function(x) exp(-x^2/2) 
+
+# proposal density
+g <- function(x) lambda/2 * exp(-lambda*abs(x))
+
+# const c for envelope sampling
+c <- 2/lambda * exp(lambda^2/2)
+
+x <- seq(-3,3,length.out=200)
+plot(x, c*g(x), type="l", col="blue")
+lines(x, f(x))
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+
+
+```r
+N <- 1e5
+U <- runif(N)
+Y <- -log(1-U)/lambda
+V <- runif(N)
+X <- ifelse(V<=1/2, Y, -Y)
+
+par(mai=c(0.9,0.9,0.2,0.1))
+hist(X, prob=TRUE, breaks=50, main=NULL)
+x <- seq(-10,10, length.out=200)
+lines(x, g(x), col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-27-1.png" width="672" />
+
+
+```r
+N <- 1e5
+
+V <- rexp(N, lambda)
+X <- ifelse(V<=1/2, Y, -Y)
+
+par(mai=c(0.9,0.9,0.2,0.1))
+hist(X, prob=TRUE, breaks=50, main=NULL)
+x <- seq(-10,10, length.out=200)
+lines(x, g(x), col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-28-1.png" width="672" />
+
+
+
+```r
+N <- 1e5
+X <- numeric(N)
+i <- 1
+count <- 0
+
+while (i<=N){
+  U <- runif(1)
+  Y <- -log(1-U)/ lambda
+  V <- runif(1)
+  Xi <- ifelse(V<=1/2, Y, -Y)
+  count <- count+1
+  
+  W <- runif(1)
+
+  if(c*g(Xi)*W <= f(Xi)){
+    X[i] <- Xi
+    i <- i+1  
+  }
+  
+}
+
+cat("count =", count, "\n")
+```
+
+```
+## count = 131439
+```
+
+```r
+par(mai=c(0.9,0.9,0.2,0.1))
+hist(X, prob=TRUE, breaks=50, main=NULL)
+x <- seq(-4,4, length.out=200)
+lines(x, dnorm(x), col="red", lwd=2)
+```
+
+<img src="01-RNG_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+
+
+:::
+
+### Choice of g
+
+- We must be able to efficiently generate samples from g
+
+- We must have $f(x)\le cg(x), \forall x$. In particular, g must have heavier tails than f, i.e. we cannot have $$\lim_{|x|\to \infty}\frac{g(x)}{f(x)}=0$$, i.e. $g(x)\to 0$ faster than $f(x)\to 0$
+
+
+:::{.example}
+
+
+1. $f(x)\sim e^{-x^2/2}, g\sim e^{-\lambda|x|}$, note that $e^{-x^2/2}$ decays faster than $e^{-\lambda|x|}$ as $|x|\to \infty$ so this example works fine.
+
+2. $f(x)\sim \frac{1}{x^\beta}$ (for large x), $g\sim e^{-\lambda x}$, note that $\frac{1}{x^\beta}$ decays slower $\implies$ cannot find c, so this example doesn't work.
+
+
+:::
+
+### Efficiency
+
+On average, we need $\frac{c}{z_f}$ proposals to generate one sample.
+
+1. We should minimize c for given f and g !!
+
+2. g should have a similar shape to f.

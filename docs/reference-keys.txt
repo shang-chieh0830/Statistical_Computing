@@ -14,3 +14,9 @@ quality-of-prngs
 the-inverse-transform-method
 rejection-sampling
 basic-rejection-sampling
+envelope-rejection-sampling
+prp:unlabeled-div-11
+exm:unlabeled-div-13
+exm:unlabeled-div-14
+choice-of-g
+efficiency

@@ -154,6 +154,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="random-number-generation.html"><a href="random-number-generation.html#rejection-sampling"><i class="fa fa-check"></i><b>2.3</b> Rejection sampling</a>
 <ul>
 <li class="chapter" data-level="2.3.1" data-path="random-number-generation.html"><a href="random-number-generation.html#basic-rejection-sampling"><i class="fa fa-check"></i><b>2.3.1</b> Basic Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.2" data-path="random-number-generation.html"><a href="random-number-generation.html#envelope-rejection-sampling"><i class="fa fa-check"></i><b>2.3.2</b> Envelope Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.3" data-path="random-number-generation.html"><a href="random-number-generation.html#choice-of-g"><i class="fa fa-check"></i><b>2.3.3</b> Choice of g</a></li>
+<li class="chapter" data-level="2.3.4" data-path="random-number-generation.html"><a href="random-number-generation.html#efficiency"><i class="fa fa-check"></i><b>2.3.4</b> Efficiency</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -559,6 +562,143 @@ But fortunately, we can have extremely large period in R.</p>
 <span id="cb44-5"><a href="random-number-generation.html#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span>z</span></code></pre></div>
 <pre><code>## [1] 1.27324</code></pre>
 </div>
+</div>
+<div id="envelope-rejection-sampling" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> Envelope Rejection Sampling<a href="random-number-generation.html#envelope-rejection-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall: In previous sections, we generate <span class="math inline">\(X\sim g\)</span> and <span class="math inline">\(U\sim U(0,1)\)</span>. We accept X, if <span class="math inline">\(U\le p(X)\)</span>.</p>
+<p>Also, accepted sample have density <span class="math inline">\(f(x)=\frac{1}{z}p(x)g(x)\)</span>. Note that this implies <span class="math inline">\(p(x)=constant\times\frac{f(x)}{g(x)}.\)</span></p>
+<p>But <span class="math inline">\(p(x)\)</span> is a probability, so we must have <span class="math inline">\(\frac{f(x)}{g(x)}\)</span> to be bounded, i.e. <span class="math inline">\(f(x)\le c\times g(x),\forall x\)</span> for some constant c, so that we can adjust the constant term in <span class="math inline">\(p(x)=constant\times\frac{f(x)}{g(x)}\)</span> such that <span class="math inline">\(p(x)\in [0,1].\)</span> It turns out this constant term is <span class="math inline">\(\frac{1}{c}\)</span>, i.e. <span class="math inline">\(p(x)=\frac{1}{c}\frac{f(x)}{g(x)}\)</span></p>
+<p>In this section, instead of finding what <span class="math inline">\(f\)</span> is, <span class="math inline">\(f\)</span> is already <strong>GIVEN</strong>, envelope rejection sampling can do this.</p>
+<p><span class="math inline">\(f(x)\le c\times g(x),\forall x\)</span>, is why we call it envelope rejection sampling.</p>
+<p>We will only require f to known up to a multiplicative constant (e.g. instead of knowing <span class="math inline">\(f(x)=\frac{1}{\sqrt{2\pi}}e^{-x^2/2}\)</span>, we only need to know <span class="math inline">\(f(x)=e^{-x^2/2}\)</span>), and we assume <span class="math inline">\(f(x)\ge 0\)</span> (don’t need to integrate to 1.), to get samples from <span class="math display">\[\tilde f(x)=\frac{1}{z_f}f(x), z_f=\int_{\mathcal R}f(x)dx\]</span></p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-11" class="proposition"><strong>Proposition 2.3  </strong></span>Input: <span class="math inline">\(f: \mathcal R \to [0,\infty)\)</span> with <span class="math inline">\(z_f=\int f(x)dx&lt;\infty\)</span>, <span class="math inline">\(g: \mathcal R \to [0,\infty)\)</span> be a probability density, and a constant c such that <span class="math inline">\(f(x)\le cg(x)\)</span></p>
+<p>Generate <span class="math inline">\(X\sim g\)</span> and <span class="math inline">\(U\sim U(0,1)\)</span>. We accept X, if <span class="math inline">\(cg(x)\times U\le f(x)\)</span> (you can write <span class="math inline">\(U\le \frac{f(x)}{cg(x)}\)</span>, but make sure that the denominator ≠ 0)</p>
+<p>Then we have:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Accepted samples have density <span class="math inline">\(\tilde f(x)=\frac{1}{z_f}f(x)\)</span></p></li>
+<li><p>Each proposal is accepted with probability <span class="math inline">\(\frac{z_f}{c}\)</span>, and mean number of proposals per output is <span class="math inline">\(\frac{c}{z_f}\)</span></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><span id="unlabeled-div-12" class="proof"><em>Proof</em>. </span>Each proposal is accepted with probability <span class="math inline">\(p(x)=\begin{cases} \frac{f(x)}{cg(x)} &amp; \text{ if } g(x)&gt;0 \\ 1 &amp; \text{ if } g(x)=0 \end{cases}.\)</span> Note that when <span class="math inline">\(g(x)=0\)</span>, <span class="math inline">\(cg(x)\times U=0\le f(x)\)</span> always holds b/c we also assume <span class="math inline">\(f(x)&gt;0\)</span>, so we must accept X when <span class="math inline">\(g(x)=0\)</span></p>
+<p>By basic rejection sampling, the accepted samples have density <span class="math inline">\(\frac{1}{z}p(x)g(x)=\begin{cases} \frac{1}{z}\frac{f(x)}{cg(x)}g(x)=f(x)/zc &amp; \text{ if } g(x)&gt;0\\ \frac{1}{z}\times 1\times g(x)=0 &amp; \text{ if }g(x)=0\end{cases}\)</span></p>
+<p>In fact, from the above we get <span class="math inline">\(\frac{1}{z}p(x)g(x)=\frac{f(x)}{zc}\)</span> no matter whether <span class="math inline">\(g(x)=0\)</span>. This is b/c <span class="math inline">\(f(x)\le c\times g(x),\forall x\)</span> so <span class="math inline">\(g(x)=0\implies f(x)=0\)</span></p>
+<p><span class="math inline">\(z=\int p(x)g(x)dx=\frac{1}{c}\int f(x)dx=\frac{z_f}{c}\\ \implies\frac{1}{z}p(x)g(x)=\frac{c}{z_f}\frac{f(x)}{c}=\frac{1}{z_f}f(x)=\tilde f(x)\)</span></p>
+<p>Each sample is accepted with probability <span class="math inline">\(z=z_f/c\)</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-13" class="example"><strong>Example 2.4  </strong></span>Consider <span class="math inline">\(f(x)=e^{-x^2/2}\)</span>, we want to find some constant c and proposal <span class="math inline">\(g(x)\)</span> so that <span class="math inline">\(f(x)\le cg(x)\)</span></p>
+<p>Since <span class="math inline">\(f(x)\)</span> is pretty similar to std. Normal, one can consider <span class="math inline">\(g(x)\)</span> to be double exponential distribution.</p>
+<p>For proposals: <span class="math inline">\(X\sim \frac{\lambda}{2}e^{-\lambda|x|}=:g(x)\)</span></p>
+<p>(Let’s digress a little bit, how can we use inverse transform sampling to generate random samples from double exponential distribution?</p>
+<p>Steps:</p>
+<p>Generate <span class="math inline">\(U\sim U(0,1)\)</span>,</p>
+<p>Generate <span class="math inline">\(Y=-\frac{log(1-U)}{\lambda}\)</span></p>
+<p>(note that this is from exponential distribution, so it only has positive side of double exponential),</p>
+<p>Generate <span class="math inline">\(V\sim U(0,1)\)</span></p>
+<p>(double exponential is symmetric to 0),</p>
+<p>and let <span class="math inline">\(X=\begin{cases}Y, &amp; V\le1/2 \\-Y, &amp; V&gt;1/2 \end{cases}\)</span></p>
+<p>)</p>
+<p>Now, can we find c with <span class="math inline">\(f(x)\le cg(x), \forall x\in \mathcal R\)</span>, or equivalently, <span class="math inline">\(f(x)/g(x)\le c, \forall x\in \mathcal R\)</span>?</p>
+<p>(The equivalence holds b/c g(x) is never 0 in this example)</p>
+<p><span class="math inline">\(\frac{f(x)}{g(x)}=\frac{e^{-x^2/2}}{\frac{\lambda}{2}e^{-\lambda |x|}}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}\)</span></p>
+<p>Note that double exponential distribution is symmetric to 0, so we can simply consider the positive part (<span class="math inline">\(x\ge 0\)</span>), so now we have <span class="math inline">\(\frac{f(x)}{g(x)}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda x}\)</span></p>
+<p>Also note that by F.O.C, we have <span class="math inline">\(0=(-\frac{x^2}{2}+\lambda x)&#39;=-x+\lambda \iff x=\lambda\)</span>, i.e. <span class="math inline">\(-\frac{x^2}{2}+\lambda x\)</span> has max at <span class="math inline">\(x=\lambda\)</span></p>
+<p>This gives <span class="math inline">\(\frac{f(x)}{g(x)}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda |x|}=\frac{2}{\lambda}e^{-\frac{x^2}{2}+\lambda x}\le \frac{2}{\lambda}e^{-\frac{\lambda^2}{2}+\lambda^2}=\frac{2}{\lambda}e^{\frac{\lambda^2}{2}}=:c\)</span></p>
+<p>So yes, we found c with <span class="math inline">\(f(x)/g(x)\le c, \forall x\in \mathcal R\)</span></p>
+<p>Now, following the steps in envelope rejection sampling, we then:</p>
+<p>Generate <span class="math inline">\(W\sim U(0,1)\)</span>, and accept X if <span class="math inline">\(cg(x)\times W\le f(x) \\ \implies \frac{2}{\lambda}e^{\frac{\lambda^2}{2}}\frac{\lambda}{2}e^{-\lambda|x|}W\le e^{-x^2/2}\\ \implies W\le exp(-\frac{x^2}{2}+\lambda |x|-\frac{\lambda^2}{2})\)</span></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="random-number-generation.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># converting double-exponential to normal distribution</span></span>
+<span id="cb46-2"><a href="random-number-generation.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using rejection sampling</span></span>
+<span id="cb46-3"><a href="random-number-generation.html#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="random-number-generation.html#cb46-4" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb46-5"><a href="random-number-generation.html#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="random-number-generation.html#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co">#non-normalized target distribution</span></span>
+<span id="cb46-7"><a href="random-number-generation.html#cb46-7" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(<span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span>) </span>
+<span id="cb46-8"><a href="random-number-generation.html#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="random-number-generation.html#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="co"># proposal density</span></span>
+<span id="cb46-10"><a href="random-number-generation.html#cb46-10" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(x) lambda<span class="sc">/</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>lambda<span class="sc">*</span><span class="fu">abs</span>(x))</span>
+<span id="cb46-11"><a href="random-number-generation.html#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="random-number-generation.html#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="co"># const c for envelope sampling</span></span>
+<span id="cb46-13"><a href="random-number-generation.html#cb46-13" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">/</span>lambda <span class="sc">*</span> <span class="fu">exp</span>(lambda<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb46-14"><a href="random-number-generation.html#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="random-number-generation.html#cb46-15" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>,<span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb46-16"><a href="random-number-generation.html#cb46-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, c<span class="sc">*</span><span class="fu">g</span>(x), <span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb46-17"><a href="random-number-generation.html#cb46-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">f</span>(x))</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="random-number-generation.html#cb47-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb47-2"><a href="random-number-generation.html#cb47-2" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(N)</span>
+<span id="cb47-3"><a href="random-number-generation.html#cb47-3" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>U)<span class="sc">/</span>lambda</span>
+<span id="cb47-4"><a href="random-number-generation.html#cb47-4" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">runif</span>(N)</span>
+<span id="cb47-5"><a href="random-number-generation.html#cb47-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(V<span class="sc">&lt;=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, Y, <span class="sc">-</span>Y)</span>
+<span id="cb47-6"><a href="random-number-generation.html#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="random-number-generation.html#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.9</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>))</span>
+<span id="cb47-8"><a href="random-number-generation.html#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">50</span>, <span class="at">main=</span><span class="cn">NULL</span>)</span>
+<span id="cb47-9"><a href="random-number-generation.html#cb47-9" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb47-10"><a href="random-number-generation.html#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">g</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="random-number-generation.html#cb48-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb48-2"><a href="random-number-generation.html#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="random-number-generation.html#cb48-3" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">rexp</span>(N, lambda)</span>
+<span id="cb48-4"><a href="random-number-generation.html#cb48-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(V<span class="sc">&lt;=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, Y, <span class="sc">-</span>Y)</span>
+<span id="cb48-5"><a href="random-number-generation.html#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="random-number-generation.html#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.9</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>))</span>
+<span id="cb48-7"><a href="random-number-generation.html#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">50</span>, <span class="at">main=</span><span class="cn">NULL</span>)</span>
+<span id="cb48-8"><a href="random-number-generation.html#cb48-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">10</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb48-9"><a href="random-number-generation.html#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">g</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="random-number-generation.html#cb49-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb49-2"><a href="random-number-generation.html#cb49-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(N)</span>
+<span id="cb49-3"><a href="random-number-generation.html#cb49-3" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb49-4"><a href="random-number-generation.html#cb49-4" aria-hidden="true" tabindex="-1"></a>count <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb49-5"><a href="random-number-generation.html#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="random-number-generation.html#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i<span class="sc">&lt;=</span>N){</span>
+<span id="cb49-7"><a href="random-number-generation.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  U <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb49-8"><a href="random-number-generation.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>U)<span class="sc">/</span> lambda</span>
+<span id="cb49-9"><a href="random-number-generation.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb49-10"><a href="random-number-generation.html#cb49-10" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(V<span class="sc">&lt;=</span><span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, Y, <span class="sc">-</span>Y)</span>
+<span id="cb49-11"><a href="random-number-generation.html#cb49-11" aria-hidden="true" tabindex="-1"></a>  count <span class="ot">&lt;-</span> count<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb49-12"><a href="random-number-generation.html#cb49-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-13"><a href="random-number-generation.html#cb49-13" aria-hidden="true" tabindex="-1"></a>  W <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb49-14"><a href="random-number-generation.html#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-15"><a href="random-number-generation.html#cb49-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(c<span class="sc">*</span><span class="fu">g</span>(Xi)<span class="sc">*</span>W <span class="sc">&lt;=</span> <span class="fu">f</span>(Xi)){</span>
+<span id="cb49-16"><a href="random-number-generation.html#cb49-16" aria-hidden="true" tabindex="-1"></a>    X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb49-17"><a href="random-number-generation.html#cb49-17" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">&lt;-</span> i<span class="sc">+</span><span class="dv">1</span>  </span>
+<span id="cb49-18"><a href="random-number-generation.html#cb49-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb49-19"><a href="random-number-generation.html#cb49-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-20"><a href="random-number-generation.html#cb49-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-21"><a href="random-number-generation.html#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="random-number-generation.html#cb49-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;count =&quot;</span>, count, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## count = 131439</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="random-number-generation.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.9</span>,<span class="fl">0.2</span>,<span class="fl">0.1</span>))</span>
+<span id="cb51-2"><a href="random-number-generation.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">prob=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">50</span>, <span class="at">main=</span><span class="cn">NULL</span>)</span>
+<span id="cb51-3"><a href="random-number-generation.html#cb51-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>, <span class="at">length.out=</span><span class="dv">200</span>)</span>
+<span id="cb51-4"><a href="random-number-generation.html#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">dnorm</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="01-RNG_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+</div>
+</div>
+<div id="choice-of-g" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Choice of g<a href="random-number-generation.html#choice-of-g" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><p>We must be able to efficiently generate samples from g</p></li>
+<li><p>We must have <span class="math inline">\(f(x)\le cg(x), \forall x\)</span>. In particular, g must have heavier tails than f, i.e. we cannot have <span class="math display">\[\lim_{|x|\to \infty}\frac{g(x)}{f(x)}=0\]</span>, i.e. <span class="math inline">\(g(x)\to 0\)</span> faster than <span class="math inline">\(f(x)\to 0\)</span></p></li>
+</ul>
+<div class="example">
+<p><span id="exm:unlabeled-div-14" class="example"><strong>Example 2.5  </strong></span></p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(f(x)\sim e^{-x^2/2}, g\sim e^{-\lambda|x|}\)</span>, note that <span class="math inline">\(e^{-x^2/2}\)</span> decays faster than <span class="math inline">\(e^{-\lambda|x|}\)</span> as <span class="math inline">\(|x|\to \infty\)</span> so this example works fine.</p></li>
+<li><p><span class="math inline">\(f(x)\sim \frac{1}{x^\beta}\)</span> (for large x), <span class="math inline">\(g\sim e^{-\lambda x}\)</span>, note that <span class="math inline">\(\frac{1}{x^\beta}\)</span> decays slower <span class="math inline">\(\implies\)</span> cannot find c, so this example doesn’t work.</p></li>
+</ol>
+</div>
+</div>
+<div id="efficiency" class="section level3 hasAnchor" number="2.3.4">
+<h3><span class="header-section-number">2.3.4</span> Efficiency<a href="random-number-generation.html#efficiency" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>On average, we need <span class="math inline">\(\frac{c}{z_f}\)</span> proposals to generate one sample.</p>
+<ol style="list-style-type: decimal">
+<li><p>We should minimize c for given f and g !!</p></li>
+<li><p>g should have a similar shape to f.</p></li>
+</ol>
 
 </div>
 </div>
