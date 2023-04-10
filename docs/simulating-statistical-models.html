@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Simulating Statistical Models | Statistical Computing</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Simulating Statistical Models | Statistical Computing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="shang-chieh0830/Statistical_Computing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Simulating Statistical Models | Statistical Computing" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Shang-Chieh" />
+
+
+<meta name="date" content="2023-04-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="random-number-generation.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Statistical Computing</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a></li>
+<li class="chapter" data-level="2" data-path="random-number-generation.html"><a href="random-number-generation.html"><i class="fa fa-check"></i><b>2</b> Random number generation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="random-number-generation.html"><a href="random-number-generation.html#pseudo-random-number-generators"><i class="fa fa-check"></i><b>2.1</b> Pseudo random number generators</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="random-number-generation.html"><a href="random-number-generation.html#structure-of-prng-in-computer"><i class="fa fa-check"></i><b>2.1.1</b> Structure of PRNG in computer</a></li>
+<li class="chapter" data-level="2.1.2" data-path="random-number-generation.html"><a href="random-number-generation.html#quality-of-prngs"><i class="fa fa-check"></i><b>2.1.2</b> Quality of PRNGs</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="random-number-generation.html"><a href="random-number-generation.html#the-inverse-transform-method"><i class="fa fa-check"></i><b>2.2</b> The inverse transform method</a></li>
+<li class="chapter" data-level="2.3" data-path="random-number-generation.html"><a href="random-number-generation.html#rejection-sampling"><i class="fa fa-check"></i><b>2.3</b> Rejection sampling</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="random-number-generation.html"><a href="random-number-generation.html#basic-rejection-sampling"><i class="fa fa-check"></i><b>2.3.1</b> Basic Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.2" data-path="random-number-generation.html"><a href="random-number-generation.html#envelope-rejection-sampling"><i class="fa fa-check"></i><b>2.3.2</b> Envelope Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.3" data-path="random-number-generation.html"><a href="random-number-generation.html#choice-of-g"><i class="fa fa-check"></i><b>2.3.3</b> Choice of g</a></li>
+<li class="chapter" data-level="2.3.4" data-path="random-number-generation.html"><a href="random-number-generation.html#efficiency"><i class="fa fa-check"></i><b>2.3.4</b> Efficiency</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html"><i class="fa fa-check"></i><b>3</b> Simulating Statistical Models</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#markov-chains"><i class="fa fa-check"></i><b>3.1</b> Markov Chains</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#discrete-case"><i class="fa fa-check"></i><b>3.1.1</b> Discrete case</a></li>
+<li class="chapter" data-level="3.1.2" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#continuous-case"><i class="fa fa-check"></i><b>3.1.2</b> Continuous case</a></li>
+<li class="chapter" data-level="3.1.3" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#how-the-distribution-of-x_t-changes-as-t-changes"><i class="fa fa-check"></i><b>3.1.3</b> How the distribution of <span class="math inline">\(X_t\)</span> changes as t changes?</a></li>
+<li class="chapter" data-level="3.1.4" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#stationary-condition"><i class="fa fa-check"></i><b>3.1.4</b> Stationary Condition</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistical Computing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="simulating-statistical-models" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Simulating Statistical Models<a href="simulating-statistical-models.html#simulating-statistical-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="markov-chains" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Markov Chains<a href="simulating-statistical-models.html#markov-chains" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="definition">
+<p><span id="def:unlabeled-div-15" class="definition"><strong>Definition 3.1  </strong></span>A stochastic process <span class="math inline">\((X_t)_{t\in \mathcal N_0}\)</span> with values <span class="math inline">\(X_t\in S\)</span> is called a Markov Chain with state space <span class="math inline">\(S\)</span> if</p>
+<p><span class="math display">\[P(X_{t+1}\in A_{t+1}| X_t=a_t,...,X_0=a_0)=P(X_{t+1}\in A_{t+1}|X_t=a_t)\\
+\forall a_0,...,a_t\in S, A_{t+1}\subseteq S, t\in \mathcal N_0\]</span></p>
+<p>where <span class="math inline">\(\mathcal N_0=\mathcal N\cup \{0\}\)</span></p>
+<p>i.e. knowing <strong>Just Before</strong> is enough.</p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-16" class="example"><strong>Example 3.1  </strong></span><strong>Random Walk</strong></p>
+<p>Let <span class="math inline">\((\epsilon_n)_{n\in \mathcal N}\)</span> be a sequence of i.i.d. random variables, and let</p>
+<p><span class="math display">\[X_n:=\sum_{i=1}^{n}\epsilon_i, \forall n\in \mathcal N\\
+X_0:=0\]</span></p>
+<p>Then <span class="math inline">\((X_n)_{n\in \mathcal N_0}\)</span> is a Markov Chain (MC).</p>
+<p>To see this, note that <span class="math inline">\(X_{n+1}=\sum_{i=1}^{n+1}\epsilon_i=\sum_{i=1}^{n}\epsilon_i+\epsilon_{n+1}=X_n+\epsilon_{n+1}\)</span>, <span class="math inline">\(X_n\)</span> <span class="math inline">\(\perp\)</span> <span class="math inline">\(\epsilon_{n+1}\)</span></p>
+<p>So <span class="math inline">\(X_{n+1}\)</span> only depends on <span class="math inline">\(X_n\)</span></p>
+</div>
+<div class="example">
+<p><span id="exm:unlabeled-div-17" class="example"><strong>Example 3.2  </strong></span>Let <span class="math inline">\((\epsilon_n)_{n\in \mathcal N}\)</span> be i.i.d., and let</p>
+<p><span class="math display">\[X_0=0, X_1=0,\\
+X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
+<p><span class="math inline">\(X_{n+1}=\frac12 X_n+\frac12 X_{n-1}+\epsilon_{n+1}\)</span></p>
+<p><span class="math inline">\(X_{n+1}\)</span> not only depends on <span class="math inline">\(X_n\)</span> but also <span class="math inline">\(X_{n-1}\)</span> so not a MC.</p>
+</div>
+<p>A MC is described by</p>
+<ol style="list-style-type: decimal">
+<li><p>the probability <span class="math inline">\(p_{xy}(t)=P(X_{t+1}=y|X_t=x)\)</span></p></li>
+<li><p>the probability <span class="math inline">\(\pi_x=P(X_0=x)\)</span> (This just controls the initial condition, also note that this notation is only valid in discrete cases)</p></li>
+</ol>
+<p>If <span class="math inline">\(p_{xy}(t)=p_{xy}\)</span> independent of t, then <span class="math inline">\((X_t)_{t\in \mathcal N}\)</span> is called time homogeneous.</p>
+<p>From now on, we will assume time homogeneous.</p>
+<div id="discrete-case" class="section level3 hasAnchor" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Discrete case<a href="simulating-statistical-models.html#discrete-case" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If S is discrete, then we can characterise transition probabilities by the probabilities <span class="math inline">\(p_{xy}=P(X_{t+1}=y|X_t=x),\forall t\in \mathcal N_0\)</span></p>
+<p>If S is finite, we can write the <span class="math inline">\(p_{xy}\)</span> as a matrix.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-18" class="example"><strong>Example 3.3  </strong></span>Consider <span class="math inline">\(S=\{1,2,3\}\)</span></p>
+<p><span class="math inline">\(P=\begin{bmatrix}\frac12 &amp; \frac12 &amp; 0 \\ 0 &amp; \frac12 &amp; \frac12 \\ 1&amp; 0 &amp; 0 \end{bmatrix}\)</span></p>
+<p><span class="math inline">\(p_{xy}\)</span> corresponds to row x, column y
+<span class="math inline">\(\implies P(X_{t+1}=2|X_t=1)=p_{12}=\frac12\)</span></p>
+<p>Note that from this matrix, you can see when in state 3, you must go to state 1 in next step.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="simulating-statistical-models.html#cb52-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
+<span id="cb52-2"><a href="simulating-statistical-models.html#cb52-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb52-3"><a href="simulating-statistical-models.html#cb52-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb52-4"><a href="simulating-statistical-models.html#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="simulating-statistical-models.html#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co"># For initial condition</span></span>
+<span id="cb52-6"><a href="simulating-statistical-models.html#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remember there are 3 states</span></span>
+<span id="cb52-7"><a href="simulating-statistical-models.html#cb52-7" aria-hidden="true" tabindex="-1"></a>pi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>) </span>
+<span id="cb52-8"><a href="simulating-statistical-models.html#cb52-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-9"><a href="simulating-statistical-models.html#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="simulating-statistical-models.html#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="co"># sampling 1 number from 1:3 with prob=pi</span></span>
+<span id="cb52-11"><a href="simulating-statistical-models.html#cb52-11" aria-hidden="true" tabindex="-1"></a>X0 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="at">prob=</span>pi)</span>
+<span id="cb52-12"><a href="simulating-statistical-models.html#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="simulating-statistical-models.html#cb52-13" aria-hidden="true" tabindex="-1"></a>Xi <span class="ot">&lt;-</span> X0</span>
+<span id="cb52-14"><a href="simulating-statistical-models.html#cb52-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb52-15"><a href="simulating-statistical-models.html#cb52-15" aria-hidden="true" tabindex="-1"></a>  p.next <span class="ot">&lt;-</span> P[Xi,]</span>
+<span id="cb52-16"><a href="simulating-statistical-models.html#cb52-16" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>,<span class="dv">1</span>, <span class="at">prob=</span>p.next)</span>
+<span id="cb52-17"><a href="simulating-statistical-models.html#cb52-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;X[&quot;</span>, i, <span class="st">&quot;] = &quot;</span>, Xi, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb52-18"><a href="simulating-statistical-models.html#cb52-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## X[1] = 2
+## X[2] = 3
+## X[3] = 1
+## X[4] = 1
+## X[5] = 1
+## X[6] = 2
+## X[7] = 3
+## X[8] = 1
+## X[9] = 1
+## X[10] = 2</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="simulating-statistical-models.html#cb54-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
+<span id="cb54-2"><a href="simulating-statistical-models.html#cb54-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb54-3"><a href="simulating-statistical-models.html#cb54-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb54-4"><a href="simulating-statistical-models.html#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="simulating-statistical-models.html#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># For initial condition</span></span>
+<span id="cb54-6"><a href="simulating-statistical-models.html#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="co"># remember there are 3 states</span></span>
+<span id="cb54-7"><a href="simulating-statistical-models.html#cb54-7" aria-hidden="true" tabindex="-1"></a>pi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>) </span>
+<span id="cb54-8"><a href="simulating-statistical-models.html#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="simulating-statistical-models.html#cb54-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-10"><a href="simulating-statistical-models.html#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co"># sampling 1 number from 1:3 with prob=pi</span></span>
+<span id="cb54-11"><a href="simulating-statistical-models.html#cb54-11" aria-hidden="true" tabindex="-1"></a>X0 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="at">prob=</span>pi)</span>
+<span id="cb54-12"><a href="simulating-statistical-models.html#cb54-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-13"><a href="simulating-statistical-models.html#cb54-13" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb54-14"><a href="simulating-statistical-models.html#cb54-14" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb54-15"><a href="simulating-statistical-models.html#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-16"><a href="simulating-statistical-models.html#cb54-16" aria-hidden="true" tabindex="-1"></a>Xi <span class="ot">&lt;-</span> X0</span>
+<span id="cb54-17"><a href="simulating-statistical-models.html#cb54-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb54-18"><a href="simulating-statistical-models.html#cb54-18" aria-hidden="true" tabindex="-1"></a>  p.next <span class="ot">&lt;-</span> P[Xi,]</span>
+<span id="cb54-19"><a href="simulating-statistical-models.html#cb54-19" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>,<span class="dv">1</span>, <span class="at">prob=</span>p.next)</span>
+<span id="cb54-20"><a href="simulating-statistical-models.html#cb54-20" aria-hidden="true" tabindex="-1"></a>  X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb54-21"><a href="simulating-statistical-models.html#cb54-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb54-22"><a href="simulating-statistical-models.html#cb54-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-23"><a href="simulating-statistical-models.html#cb54-23" aria-hidden="true" tabindex="-1"></a>X</span></code></pre></div>
+<pre><code>##   [1] 2 2 3 1 2 3 1 1 1 1 1 1 1 1 2 3 1 1 1 2 3 1 1 2 2 2 3 1 2 2 3 1 1 2 2 2 2
+##  [38] 2 3 1 1 1 2 3 1 2 2 2 3 1 1 2 3 1 2 3 1 2 3 1 1 1 2 3 1 2 2 3 1 1 2 3 1 2
+##  [75] 3 1 2 2 3 1 2 2 2 3 1 2 3 1 2 3 1 1 2 2 3 1 1 2 3 1</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="simulating-statistical-models.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, <span class="at">type=</span><span class="st">&quot;b&quot;</span>)</span></code></pre></div>
+<p><img src="02-Markov_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simulating-statistical-models.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<p><img src="02-Markov_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<p>A transition matrix <span class="math inline">\(P\)</span> satisfies</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(p_{xy}\ge 0, \forall x,y\in S\)</span></p></li>
+<li><p><span class="math inline">\(\sum_{y\in S}p_{xy}=1, \forall x\in S\)</span> (對row加總=1)</p></li>
+</ol>
+<p>An initial distribution <span class="math inline">\(\pi\)</span> satisfies</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(\pi_x\ge0,\forall x\in S\)</span></p></li>
+<li><p><span class="math inline">\(\sum_{x\in S}\pi_x=1\)</span></p></li>
+</ol>
+</div>
+<div id="continuous-case" class="section level3 hasAnchor" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Continuous case<a href="simulating-statistical-models.html#continuous-case" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The notation <span class="math inline">\(P(X_{t+1}=y|X_t=x)\)</span> is no longer valid.(單點機率為0)</p>
+<p>Instead, we consider <span class="math inline">\(P(X_{t+1}\in A|X_t=x)=\int_{A}p(x,y)dy\)</span>, where <span class="math inline">\(p(x,y)\)</span> is called the transition density.</p>
+<p>Properties:</p>
+<ol style="list-style-type: lower-alpha">
+<li><p><span class="math inline">\(p(x,y)\ge 0 ,\forall x,y\in S\)</span></p></li>
+<li><p><span class="math inline">\(\int p(x,y)dy=1, \forall x\in S\)</span></p></li>
+</ol>
+<p>As for initial distribution, we have</p>
+<p><span class="math inline">\(P(X_0\in A)=\int_A\pi(x)dx\)</span></p>
+<p>and <span class="math inline">\(\pi(x)\ge 0, \forall x\in S\)</span>, <span class="math inline">\(\int \pi(x)dx=1\)</span></p>
+</div>
+<div id="how-the-distribution-of-x_t-changes-as-t-changes" class="section level3 hasAnchor" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> How the distribution of <span class="math inline">\(X_t\)</span> changes as t changes?<a href="simulating-statistical-models.html#how-the-distribution-of-x_t-changes-as-t-changes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Assume that <span class="math inline">\(P(X_t=x)=\pi_x^{(t)}, \forall x \in S\)</span>, (<span class="math inline">\(\pi^{(t)}\)</span> is the distribution of <span class="math inline">\(X_t\)</span>)</p>
+<p>Question: What is <span class="math inline">\(\pi^{(t+1)}\)</span>?</p>
+<p>Ans: We have <span class="math inline">\(\pi^{(t+1)}_x=P(X_{t+1}=x)\)</span> (this is just notation)</p>
+<p>Note that <span class="math inline">\(\pi\)</span> is column vector.</p>
+<p><span class="math display">\[\pi_x^{(t+1)}=P(X_{t+1}=x)=\sum_{y\in S}P(X_{t+1}=x, X_t=y)\\
+=\sum_{y\in S}P(X_{t+1}=x|X_t=y)P(X_t=y)\\
+=\sum_{y\in S}p_{yx}\pi_y^{(t)}\\
+=(P^T \pi^{(t)})_x, \forall x \in S\\
+\implies (\pi^{(t+1)})^T=(\pi^{(t)})^TP\]</span></p>
+<p><span class="math inline">\(\implies \pi^{(t)}=(P^T)^t\pi^{(0)}\)</span>, with initial condition: <span class="math inline">\(\pi^{(0)}\)</span>, i.e. multiply <span class="math inline">\(P^T\)</span> t times.</p>
+</div>
+<div id="stationary-condition" class="section level3 hasAnchor" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> Stationary Condition<a href="simulating-statistical-models.html#stationary-condition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Assume that <span class="math inline">\(P(X_t=x)=\pi_x^{(t)}, \forall x \in S\)</span>, (i.e. <span class="math inline">\(\pi^{(t)}\)</span> is the distribution of <span class="math inline">\(X_t\)</span>)</p>
+<p><span class="math inline">\(\pi\)</span> is a stationary distribution if <span class="math inline">\(\pi^{(t)}=\pi\implies \pi^{(t+1)}=\pi\)</span>, or <span class="math inline">\(P^T\pi=\pi\)</span>, or equivalently <span class="math inline">\(\pi^TP=\pi^T\)</span></p>
+<p>How to find stationary distribution in computer?</p>
+<p><span class="math inline">\(P^T\pi=1\times \pi\iff \pi\)</span> is an eigenvector of <span class="math inline">\(P^T\)</span> with eigen value 1.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="simulating-statistical-models.html#cb58-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb58-2"><a href="simulating-statistical-models.html#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.0</span>,</span>
+<span id="cb58-3"><a href="simulating-statistical-models.html#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>,</span>
+<span id="cb58-4"><a href="simulating-statistical-models.html#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb58-5"><a href="simulating-statistical-models.html#cb58-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-6"><a href="simulating-statistical-models.html#cb58-6" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">eigen</span>(<span class="fu">t</span>(P))</span>
+<span id="cb58-7"><a href="simulating-statistical-models.html#cb58-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="simulating-statistical-models.html#cb58-8" aria-hidden="true" tabindex="-1"></a>e</span></code></pre></div>
+<pre><code>## eigen() decomposition
+## $values
+## [1] 1+0.0i 0+0.5i 0-0.5i
+## 
+## $vectors
+##               [,1]                  [,2]                  [,3]
+## [1,] -0.6666667+0i  0.7071068+0.0000000i  0.7071068+0.0000000i
+## [2,] -0.6666667+0i -0.3535534-0.3535534i -0.3535534+0.3535534i
+## [3,] -0.3333333+0i -0.3535534+0.3535534i -0.3535534-0.3535534i</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="simulating-statistical-models.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the eigenvector with eigenvalue 1</span></span>
+<span id="cb60-2"><a href="simulating-statistical-models.html#cb60-2" aria-hidden="true" tabindex="-1"></a>e<span class="sc">$</span>vectors[,<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [1] -0.6666667+0i -0.6666667+0i -0.3333333+0i</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="simulating-statistical-models.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pi.stationary = numbers in eigenvector</span></span>
+<span id="cb62-2"><a href="simulating-statistical-models.html#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="simulating-statistical-models.html#cb62-3" aria-hidden="true" tabindex="-1"></a>pi.stat <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">2</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb62-4"><a href="simulating-statistical-models.html#cb62-4" aria-hidden="true" tabindex="-1"></a>pi.stat</span></code></pre></div>
+<pre><code>## [1] 0.6666667 0.6666667 0.3333333</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="simulating-statistical-models.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recall that eigenvectors are only defined</span></span>
+<span id="cb64-2"><a href="simulating-statistical-models.html#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="co"># up to multiplicative constants </span></span>
+<span id="cb64-3"><a href="simulating-statistical-models.html#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co"># so you can multiply constants</span></span>
+<span id="cb64-4"><a href="simulating-statistical-models.html#cb64-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-5"><a href="simulating-statistical-models.html#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="co"># we want the values sum to 1</span></span>
+<span id="cb64-6"><a href="simulating-statistical-models.html#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co"># so we divide by sum(pi.stat)</span></span>
+<span id="cb64-7"><a href="simulating-statistical-models.html#cb64-7" aria-hidden="true" tabindex="-1"></a>pi.stat <span class="ot">&lt;-</span> pi.stat<span class="sc">/</span><span class="fu">sum</span>(pi.stat)</span>
+<span id="cb64-8"><a href="simulating-statistical-models.html#cb64-8" aria-hidden="true" tabindex="-1"></a>pi.stat</span></code></pre></div>
+<pre><code>## [1] 0.4 0.4 0.2</code></pre>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="simulating-statistical-models.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check t(P) %*% pi.stat = pi.stat</span></span>
+<span id="cb66-2"><a href="simulating-statistical-models.html#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(P)<span class="sc">%*%</span> pi.stat</span></code></pre></div>
+<pre><code>##      [,1]
+## [1,]  0.4
+## [2,]  0.4
+## [3,]  0.2</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="simulating-statistical-models.html#cb68-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
+<span id="cb68-2"><a href="simulating-statistical-models.html#cb68-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb68-3"><a href="simulating-statistical-models.html#cb68-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb68-4"><a href="simulating-statistical-models.html#cb68-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="simulating-statistical-models.html#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="co"># stationary</span></span>
+<span id="cb68-6"><a href="simulating-statistical-models.html#cb68-6" aria-hidden="true" tabindex="-1"></a>pi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>) </span>
+<span id="cb68-7"><a href="simulating-statistical-models.html#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="simulating-statistical-models.html#cb68-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-9"><a href="simulating-statistical-models.html#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="co"># sampling 1 number from 1:3 with prob=pi</span></span>
+<span id="cb68-10"><a href="simulating-statistical-models.html#cb68-10" aria-hidden="true" tabindex="-1"></a>X0 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="at">prob=</span>pi)</span>
+<span id="cb68-11"><a href="simulating-statistical-models.html#cb68-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-12"><a href="simulating-statistical-models.html#cb68-12" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb68-13"><a href="simulating-statistical-models.html#cb68-13" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb68-14"><a href="simulating-statistical-models.html#cb68-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-15"><a href="simulating-statistical-models.html#cb68-15" aria-hidden="true" tabindex="-1"></a>Xi <span class="ot">&lt;-</span> X0</span>
+<span id="cb68-16"><a href="simulating-statistical-models.html#cb68-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb68-17"><a href="simulating-statistical-models.html#cb68-17" aria-hidden="true" tabindex="-1"></a>  p.next <span class="ot">&lt;-</span> P[Xi,]</span>
+<span id="cb68-18"><a href="simulating-statistical-models.html#cb68-18" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>,<span class="dv">1</span>, <span class="at">prob=</span>p.next)</span>
+<span id="cb68-19"><a href="simulating-statistical-models.html#cb68-19" aria-hidden="true" tabindex="-1"></a>  X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb68-20"><a href="simulating-statistical-models.html#cb68-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb68-21"><a href="simulating-statistical-models.html#cb68-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-22"><a href="simulating-statistical-models.html#cb68-22" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.9</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>))</span>
+<span id="cb68-23"><a href="simulating-statistical-models.html#cb68-23" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">1.5</span>,<span class="fl">2.5</span>,<span class="fl">3.5</span>), <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">probability =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="02-Markov_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="simulating-statistical-models.html#cb69-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
+<span id="cb69-2"><a href="simulating-statistical-models.html#cb69-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb69-3"><a href="simulating-statistical-models.html#cb69-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb69-4"><a href="simulating-statistical-models.html#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-5"><a href="simulating-statistical-models.html#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-6"><a href="simulating-statistical-models.html#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="co"># pi &lt;- c(0.4, 0.4, 0.2) </span></span>
+<span id="cb69-7"><a href="simulating-statistical-models.html#cb69-7" aria-hidden="true" tabindex="-1"></a>pi <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>) </span>
+<span id="cb69-8"><a href="simulating-statistical-models.html#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="co"># should converge to stationary</span></span>
+<span id="cb69-9"><a href="simulating-statistical-models.html#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="co"># when n is large</span></span>
+<span id="cb69-10"><a href="simulating-statistical-models.html#cb69-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="simulating-statistical-models.html#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="co"># sampling 1 number from 1:3 with prob=pi</span></span>
+<span id="cb69-12"><a href="simulating-statistical-models.html#cb69-12" aria-hidden="true" tabindex="-1"></a>X0 <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>, <span class="dv">1</span>, <span class="at">prob=</span>pi)</span>
+<span id="cb69-13"><a href="simulating-statistical-models.html#cb69-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-14"><a href="simulating-statistical-models.html#cb69-14" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb69-15"><a href="simulating-statistical-models.html#cb69-15" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb69-16"><a href="simulating-statistical-models.html#cb69-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-17"><a href="simulating-statistical-models.html#cb69-17" aria-hidden="true" tabindex="-1"></a>Xi <span class="ot">&lt;-</span> X0</span>
+<span id="cb69-18"><a href="simulating-statistical-models.html#cb69-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb69-19"><a href="simulating-statistical-models.html#cb69-19" aria-hidden="true" tabindex="-1"></a>  p.next <span class="ot">&lt;-</span> P[Xi,]</span>
+<span id="cb69-20"><a href="simulating-statistical-models.html#cb69-20" aria-hidden="true" tabindex="-1"></a>  Xi <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">3</span>,<span class="dv">1</span>, <span class="at">prob=</span>p.next)</span>
+<span id="cb69-21"><a href="simulating-statistical-models.html#cb69-21" aria-hidden="true" tabindex="-1"></a>  X[i] <span class="ot">&lt;-</span> Xi</span>
+<span id="cb69-22"><a href="simulating-statistical-models.html#cb69-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb69-23"><a href="simulating-statistical-models.html#cb69-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-24"><a href="simulating-statistical-models.html#cb69-24" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>,<span class="fl">0.9</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>))</span>
+<span id="cb69-25"><a href="simulating-statistical-models.html#cb69-25" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">1.5</span>,<span class="fl">2.5</span>,<span class="fl">3.5</span>), <span class="at">main=</span><span class="cn">NULL</span>, <span class="at">probability =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="02-Markov_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="random-number-generation.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"repo": "https://github.com/shang-chieh0830/Statistical_Computing"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
