@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Shang-Chieh" />
 
 
-<meta name="date" content="2023-04-10" />
+<meta name="date" content="2023-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -37,7 +37,7 @@ set in the _output.yml file.</p>" />
   
   
 <link rel="prev" href="random-number-generation.html"/>
-
+<link rel="next" href="monte-carlo-methods.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -169,6 +169,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.4" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#stationary-condition"><i class="fa fa-check"></i><b>3.1.4</b> Stationary Condition</a></li>
 </ul></li>
 </ul></li>
+<li class="chapter" data-level="4" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html"><i class="fa fa-check"></i><b>4</b> Monte Carlo methods</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#studying-models-via-simulation"><i class="fa fa-check"></i><b>4.1</b> Studying models via simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2</b> Monte Carlo estimates</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#computing-monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2.1</b> Computing Monte Carlo estimates</a></li>
+<li class="chapter" data-level="4.2.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-error-and-choice-of-sample-size"><i class="fa fa-check"></i><b>4.2.2</b> Monte Carlo error and Choice of sample size</a></li>
+<li class="chapter" data-level="4.2.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#refined-error-bounds"><i class="fa fa-check"></i><b>4.2.3</b> Refined error bounds</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#variance-reduction-methods"><i class="fa fa-check"></i><b>4.3</b> Variance reduction methods</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#importance-sampling"><i class="fa fa-check"></i><b>4.3.1</b> Importance sampling</a></li>
+<li class="chapter" data-level="4.3.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#antithetic-variables"><i class="fa fa-check"></i><b>4.3.2</b> Antithetic variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#control-variates"><i class="fa fa-check"></i><b>4.3.3</b> Control variates</a></li>
+</ul></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -255,12 +271,12 @@ X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
 ## X[2] = 3
 ## X[3] = 1
 ## X[4] = 1
-## X[5] = 1
+## X[5] = 2
 ## X[6] = 2
-## X[7] = 3
-## X[8] = 1
+## X[7] = 2
+## X[8] = 3
 ## X[9] = 1
-## X[10] = 2</code></pre>
+## X[10] = 1</code></pre>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="simulating-statistical-models.html#cb54-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
 <span id="cb54-2"><a href="simulating-statistical-models.html#cb54-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
 <span id="cb54-3"><a href="simulating-statistical-models.html#cb54-3" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">3</span>, <span class="dv">3</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
@@ -284,9 +300,9 @@ X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
 <span id="cb54-21"><a href="simulating-statistical-models.html#cb54-21" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb54-22"><a href="simulating-statistical-models.html#cb54-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-23"><a href="simulating-statistical-models.html#cb54-23" aria-hidden="true" tabindex="-1"></a>X</span></code></pre></div>
-<pre><code>##   [1] 2 2 3 1 2 3 1 1 1 1 1 1 1 1 2 3 1 1 1 2 3 1 1 2 2 2 3 1 2 2 3 1 1 2 2 2 2
-##  [38] 2 3 1 1 1 2 3 1 2 2 2 3 1 1 2 3 1 2 3 1 2 3 1 1 1 2 3 1 2 2 3 1 1 2 3 1 2
-##  [75] 3 1 2 2 3 1 2 2 2 3 1 2 3 1 2 3 1 1 2 2 3 1 1 2 3 1</code></pre>
+<pre><code>##   [1] 1 1 2 2 3 1 2 2 2 2 3 1 1 1 2 3 1 1 1 2 3 1 2 2 2 2 2 3 1 2 2 2 3 1 2 2 3
+##  [38] 1 1 1 2 2 2 2 3 1 2 3 1 1 2 3 1 2 3 1 2 3 1 1 1 1 2 2 2 2 3 1 1 1 2 3 1 1
+##  [75] 1 2 2 3 1 2 3 1 1 1 2 2 3 1 2 3 1 2 2 3 1 1 2 2 3 1</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="simulating-statistical-models.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, <span class="at">type=</span><span class="st">&quot;b&quot;</span>)</span></code></pre></div>
 <p><img src="02-Markov_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simulating-statistical-models.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main =</span> <span class="cn">NULL</span>)</span></code></pre></div>
@@ -434,8 +450,8 @@ X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
           </div>
         </div>
       </div>
-<a href="random-number-generation.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="random-number-generation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="monte-carlo-methods.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

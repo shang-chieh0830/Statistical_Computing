@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Monte Carlo methods | Statistical Computing</title>
+  <meta name="description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Monte Carlo methods | Statistical Computing" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  <meta name="github-repo" content="shang-chieh0830/Statistical_Computing" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Monte Carlo methods | Statistical Computing" />
+  
+  <meta name="twitter:description" content="<p>This is a minimal example of using the bookdown package to write a book.
+The HTML output format for this example is bookdown::gitbook,
+set in the _output.yml file.</p>" />
+  
+
+<meta name="author" content="Shang-Chieh" />
+
+
+<meta name="date" content="2023-04-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simulating-statistical-models.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Statistical Computing</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a></li>
+<li class="chapter" data-level="2" data-path="random-number-generation.html"><a href="random-number-generation.html"><i class="fa fa-check"></i><b>2</b> Random number generation</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="random-number-generation.html"><a href="random-number-generation.html#pseudo-random-number-generators"><i class="fa fa-check"></i><b>2.1</b> Pseudo random number generators</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="random-number-generation.html"><a href="random-number-generation.html#structure-of-prng-in-computer"><i class="fa fa-check"></i><b>2.1.1</b> Structure of PRNG in computer</a></li>
+<li class="chapter" data-level="2.1.2" data-path="random-number-generation.html"><a href="random-number-generation.html#quality-of-prngs"><i class="fa fa-check"></i><b>2.1.2</b> Quality of PRNGs</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="random-number-generation.html"><a href="random-number-generation.html#the-inverse-transform-method"><i class="fa fa-check"></i><b>2.2</b> The inverse transform method</a></li>
+<li class="chapter" data-level="2.3" data-path="random-number-generation.html"><a href="random-number-generation.html#rejection-sampling"><i class="fa fa-check"></i><b>2.3</b> Rejection sampling</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="random-number-generation.html"><a href="random-number-generation.html#basic-rejection-sampling"><i class="fa fa-check"></i><b>2.3.1</b> Basic Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.2" data-path="random-number-generation.html"><a href="random-number-generation.html#envelope-rejection-sampling"><i class="fa fa-check"></i><b>2.3.2</b> Envelope Rejection Sampling</a></li>
+<li class="chapter" data-level="2.3.3" data-path="random-number-generation.html"><a href="random-number-generation.html#choice-of-g"><i class="fa fa-check"></i><b>2.3.3</b> Choice of g</a></li>
+<li class="chapter" data-level="2.3.4" data-path="random-number-generation.html"><a href="random-number-generation.html#efficiency"><i class="fa fa-check"></i><b>2.3.4</b> Efficiency</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html"><i class="fa fa-check"></i><b>3</b> Simulating Statistical Models</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#markov-chains"><i class="fa fa-check"></i><b>3.1</b> Markov Chains</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#discrete-case"><i class="fa fa-check"></i><b>3.1.1</b> Discrete case</a></li>
+<li class="chapter" data-level="3.1.2" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#continuous-case"><i class="fa fa-check"></i><b>3.1.2</b> Continuous case</a></li>
+<li class="chapter" data-level="3.1.3" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#how-the-distribution-of-x_t-changes-as-t-changes"><i class="fa fa-check"></i><b>3.1.3</b> How the distribution of <span class="math inline">\(X_t\)</span> changes as t changes?</a></li>
+<li class="chapter" data-level="3.1.4" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#stationary-condition"><i class="fa fa-check"></i><b>3.1.4</b> Stationary Condition</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html"><i class="fa fa-check"></i><b>4</b> Monte Carlo methods</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#studying-models-via-simulation"><i class="fa fa-check"></i><b>4.1</b> Studying models via simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2</b> Monte Carlo estimates</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#computing-monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2.1</b> Computing Monte Carlo estimates</a></li>
+<li class="chapter" data-level="4.2.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-error-and-choice-of-sample-size"><i class="fa fa-check"></i><b>4.2.2</b> Monte Carlo error and Choice of sample size</a></li>
+<li class="chapter" data-level="4.2.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#refined-error-bounds"><i class="fa fa-check"></i><b>4.2.3</b> Refined error bounds</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#variance-reduction-methods"><i class="fa fa-check"></i><b>4.3</b> Variance reduction methods</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#importance-sampling"><i class="fa fa-check"></i><b>4.3.1</b> Importance sampling</a></li>
+<li class="chapter" data-level="4.3.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#antithetic-variables"><i class="fa fa-check"></i><b>4.3.2</b> Antithetic variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#control-variates"><i class="fa fa-check"></i><b>4.3.3</b> Control variates</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistical Computing</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="monte-carlo-methods" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Monte Carlo methods<a href="monte-carlo-methods.html#monte-carlo-methods" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="studying-models-via-simulation" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Studying models via simulation<a href="monte-carlo-methods.html#studying-models-via-simulation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall:</p>
+<div class="definition">
+<p><span id="def:unlabeled-div-19" class="definition"><strong>Definition 4.1  </strong></span>In discrete case, expectation is defined to be</p>
+<p><span class="math inline">\(E(X)=\sum_x xP(X=x)\)</span></p>
+<p><span class="math inline">\(E(f(X))=\sum_x f(x)P(X=x)\)</span></p>
+<p>In continuous case, we have</p>
+<p><span class="math inline">\(E(X)=\int_{\mathcal R}x\phi(x)dx\)</span></p>
+<p><span class="math inline">\(E(f(X))=\int_{\mathcal R}f(x)\phi(x)dx\)</span> where <span class="math inline">\(\phi(x)\)</span> is the density of <span class="math inline">\(X\)</span> at <span class="math inline">\(x\)</span></p>
+</div>
+<p><span class="math inline">\(\underline{\text{Law of Large Numbers (LLN)}}\)</span></p>
+<p>Let <span class="math inline">\((X_j)_{j\in \mathcal N}\)</span> be a sequence of i.i.d. copies of <span class="math inline">\(X\)</span></p>
+<p>Then <span class="math display">\[\lim_{N\to \infty}\frac1N \sum_{j=1}^{N}f(X_j)=E[f(X)]\]</span></p>
+<p><strong>Ideas for approximating <span class="math inline">\(E[f(X)]\)</span>:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Use <span class="math inline">\(E(X)=\int x\phi(x)dx\)</span> and try to numerically approximate the integral, this relates to numerical analysis and will not be covered here.</p></li>
+<li><p><span class="math inline">\(E(f(X))=\lim_{N\to \infty}\frac1N \sum_{j=1}^{N}f(X_j)\\ \approx \frac1N \sum_{j=1}^{N}f(X_j)\)</span> for a large N</p></li>
+</ol>
+<p>i.e., <span class="math inline">\(Z^{MC}_N=\frac1N\sum_{j=1}^{N}f(X_j)\)</span>, where <span class="math inline">\(X_j\)</span>, j=1,…,N are i.i.d. copies of <span class="math inline">\(X\)</span>, then <span class="math inline">\(Z^{MC}_N\approx E[f(X)]\)</span></p>
+<div class="example">
+<p><span id="exm:unlabeled-div-20" class="example"><strong>Example 4.1  </strong></span>Assume <span class="math inline">\(X\sim N(\mu, \sigma^2)\)</span>, assume we want to estimate <span class="math inline">\(E[sin(X)]\)</span>, i.e., <span class="math inline">\(f(X)=sin(X),\quad Z^{MC}_N=\frac1N\sum_{j=1}^{N}sin(X_j),\quad X_1,...,X_N\sim i.i.d. N(\mu, \sigma^2)\)</span></p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="monte-carlo-methods.html#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aim: estimate E(sin(X)) where X is normal</span></span>
+<span id="cb70-2"><a href="monte-carlo-methods.html#cb70-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-3"><a href="monte-carlo-methods.html#cb70-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb70-4"><a href="monte-carlo-methods.html#cb70-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb70-5"><a href="monte-carlo-methods.html#cb70-5" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000000</span></span>
+<span id="cb70-6"><a href="monte-carlo-methods.html#cb70-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, mu, sigma)</span>
+<span id="cb70-7"><a href="monte-carlo-methods.html#cb70-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-8"><a href="monte-carlo-methods.html#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">sin</span>(X))</span></code></pre></div>
+<pre><code>## [1] 0.5109993</code></pre>
+</div>
+<p><strong>Applications:</strong></p>
+<ol style="list-style-type: decimal">
+<li>computing probabilities</li>
+</ol>
+<p>Recall a indicator function: <span class="math inline">\(\boldsymbol 1_A(x)=\begin{cases}1 &amp; \text{ if }x\in A\\ 0 &amp; \text{ if }x\notin A\end{cases}\)</span></p>
+<p><span class="math inline">\(\implies E(\boldsymbol 1_A(x))=0\times P(\boldsymbol 1_A(x)=0)+1\times P(\boldsymbol 1_A(x)=1)=P(X\in A)\\ \implies P(X\in A)=E(\boldsymbol 1_A(x))=\frac1N\sum_{j=1}^{N}\boldsymbol 1_A(X_j)\)</span>, which is exactly the proportion of <span class="math inline">\(X_j\)</span> which are in A</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="monte-carlo-methods.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aim: estimate P(X in A), where X is a random variable and A is a set.</span></span>
+<span id="cb72-2"><a href="monte-carlo-methods.html#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="monte-carlo-methods.html#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="co"># assume X ~ N(0,1)</span></span>
+<span id="cb72-4"><a href="monte-carlo-methods.html#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="co"># let A=[1, 2]</span></span>
+<span id="cb72-5"><a href="monte-carlo-methods.html#cb72-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-6"><a href="monte-carlo-methods.html#cb72-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e6</span></span>
+<span id="cb72-7"><a href="monte-carlo-methods.html#cb72-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N)</span>
+<span id="cb72-8"><a href="monte-carlo-methods.html#cb72-8" aria-hidden="true" tabindex="-1"></a>f.of.X <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(X<span class="sc">&gt;=</span><span class="dv">1</span> <span class="sc">&amp;</span> X<span class="sc">&lt;=</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb72-9"><a href="monte-carlo-methods.html#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(f.of.X)</span></code></pre></div>
+<pre><code>## [1] 0.136131</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="monte-carlo-methods.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In fact, we can get the exact result</span></span>
+<span id="cb74-2"><a href="monte-carlo-methods.html#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="monte-carlo-methods.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.1359051</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>computing integrals</li>
+</ol>
+<p>Assume we want to approximate <span class="math inline">\(\int_{a}^{b}h(x)dx\)</span></p>
+<p>Choose <span class="math inline">\(X\sim U(a,b)\implies \phi(x)=\begin{cases}\frac{1}{b-a} &amp; \text{ if } x\in [a,b]\\0 &amp; \text{ if } x\notin [a,b]\end{cases}\)</span></p>
+<p><span class="math inline">\(E(f(X))=\int f(x)\phi(x)dx=\int_a^b h(x)dx\)</span></p>
+<p>Also, <span class="math inline">\(f(x)\phi(x)= f(x)\boldsymbol 1_{[a,b]}\frac{1}{b-a}=f(x)\frac{1}{b-a} \forall x \in [a,b]\)</span></p>
+<p><span class="math inline">\(\implies f(x)=h(x)(b-a)\)</span></p>
+<p>So, if <span class="math inline">\(X\sim U(a,b)\)</span>, then <span class="math inline">\(\int_a^b h(x)dx=E((b-a)h(X))\approx \frac1N \sum_{j=1}^{N}(b-a)h(X_j)\)</span>, where <span class="math inline">\(X_j\sim U(a,b)\)</span> are i.i.d.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="monte-carlo-methods.html#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aim: integrate h(x)=x^2 from 2 to 3</span></span>
+<span id="cb76-2"><a href="monte-carlo-methods.html#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="monte-carlo-methods.html#cb76-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e6</span></span>
+<span id="cb76-4"><a href="monte-carlo-methods.html#cb76-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb76-5"><a href="monte-carlo-methods.html#cb76-5" aria-hidden="true" tabindex="-1"></a>f.of.X <span class="ot">&lt;-</span> X<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>(<span class="dv">3-2</span>)</span>
+<span id="cb76-6"><a href="monte-carlo-methods.html#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(f.of.X)</span></code></pre></div>
+<pre><code>## [1] 6.330978</code></pre>
+<p>Analytic solution:</p>
+<p><span class="math inline">\(\int_{2}^{3}x^2dx=\frac13x^3|^{3}_{x=2}=\frac133^3-\frac132^3\\=\frac1327-\frac138=9-\frac83=\frac{19}{3}\)</span></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="monte-carlo-methods.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="dv">19</span><span class="sc">/</span><span class="dv">3</span></span></code></pre></div>
+<pre><code>## [1] 6.333333</code></pre>
+</div>
+<div id="monte-carlo-estimates" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Monte Carlo estimates<a href="monte-carlo-methods.html#monte-carlo-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="computing-monte-carlo-estimates" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Computing Monte Carlo estimates<a href="monte-carlo-methods.html#computing-monte-carlo-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall: <span class="math inline">\(Z_N^{MC}=\frac1N\sum_{j=1}^{N}f(X_j)\approx E(f(X))\)</span>, where <span class="math inline">\(X_j\)</span> are i.i.d. copies of <span class="math inline">\(X\)</span></p>
+<ul>
+<li><p>need to generate the <span class="math inline">\(X_j\)</span> (see chapter 1 in the book)</p></li>
+<li><p>need to apply <span class="math inline">\(f\)</span> to get <span class="math inline">\(f(X_j)\)</span></p></li>
+<li><p>need to compute the average, a lot of memory is needed to store <span class="math inline">\(X_1,...,X_N\)</span></p></li>
+</ul>
+<p>To save memory, we could sum up the values, as we generate them:</p>
+<pre><code>s &lt;- 0
+for j=1,...,N:
+
+  generate X_j
+  
+  s &lt;- s + f(X_j)
+ </code></pre>
+<p>result: <span class="math inline">\(s/N\)</span></p>
+<p>The downside is that the <code>for loop</code> in R is relatively slow, so there’s a trade-off. Use the <code>for loop</code> if you run out of memory.</p>
+<p>We will also need to compute the sample variance of the <span class="math inline">\(f(X_j):\)</span></p>
+<p><span class="math inline">\(s^2_{f(X_j)}=\frac{1}{N-1}\sum_{j=1}^{N}(f(X_j)-\bar{f(X)})^2\\=\frac{1}{N-1}\sum_{j=1}^{N}f(X_j)^2-\frac{N}{N-1}(\frac1N\sum_{j=1}^{N}f(X_j))^2\)</span>, where <span class="math inline">\(\bar{f(X)}=\frac1N\sum_{j=1}^{N}f(X_j)\)</span></p>
+<pre><code>s &lt;- 0
+t &lt;- 0
+for j=1,..,N:
+  generate X_j
+  s &lt;- s + f(X_j)
+  t &lt;- t + (f(X_j))^2</code></pre>
+<p>Then <span class="math inline">\(Z_N^{MC}=s/N, s^2=\frac{t}{N-1}-\frac{N}{N-1}(Z_N^{MC})^2\)</span></p>
+</div>
+<div id="monte-carlo-error-and-choice-of-sample-size" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Monte Carlo error and Choice of sample size<a href="monte-carlo-methods.html#monte-carlo-error-and-choice-of-sample-size" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Recall:</p>
+<p><span class="math inline">\(Z_N^{MC}=\frac1N\sum_{j=1}^{N}f(X_j)\approx E(f(X))\)</span></p>
+<ul>
+<li><p><span class="math inline">\(bias(Z_N^{MC})=E(Z_N^{MC})-E(f(X))\)</span></p></li>
+<li><p><span class="math inline">\(std. error(Z_N^{MC})=std.dev(Z_N^{MC})=\sqrt{Var(Z_N^{MC})}\)</span></p></li>
+<li><p><span class="math inline">\(MSE(Z_N^{MC})=E(Z_N^{MC}-E[f(X)]^2)=Var(Z_N^{MC})-bias(Z_N^{MC})^2\)</span></p></li>
+<li><p><span class="math inline">\(E(Z_N^{MC})=E(\frac1N\sum_{j=1}^{N}f(X_j))=\frac1N\sum_{j=1}^{N} E(f(X_j))=\frac1N\sum_{j=1}^{N} E(f(X))=\frac N N E(f(X))=E(f(X))\)</span></p></li>
+</ul>
+<p>In the above, we use the fact that <span class="math inline">\(X_j\)</span> are i.i.d copies of <span class="math inline">\(X\)</span></p>
+<p>Hence, we get <span class="math inline">\(bias(Z_N^{MC})=0\)</span>, and <span class="math inline">\(MSE(Z_N^{MC})=Var(Z_N^{MC})=std. error(Z_N^{MC})^2\)</span></p>
+<ul>
+<li><span class="math inline">\(Var(Z_N^{MC})=Var(\frac1N \sum_{j=1}^{N}f(X_j))=\\\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X_j))=\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X))=\frac1N Var(f(X))\)</span></li>
+</ul>
+<p>Hence, we get <span class="math inline">\(MSE(Z_N^{MC})=Var(Z_N^{MC})=\frac1N Var(f(X))\)</span></p>
+<ul>
+<li><span class="math inline">\(RMSE(Z_N^{MC})=\sqrt{\frac{Var(f(X))}{N}}=\frac{std.error(Z_N^{MC})}{\sqrt{N}}\)</span></li>
+</ul>
+<p>To achieve <span class="math inline">\(RMSE(Z_N^{MC})\le \epsilon\)</span>, we need <span class="math inline">\(\epsilon\ge RMSE(Z_N^{MC})\implies \epsilon^2\ge MSE(Z_N^{MC})=\frac1N Var(f(X))\\\implies N\ge \frac{Var(f(X))}{\epsilon^2}\)</span></p>
+<p>We can estimate <span class="math inline">\(Var(f(X))\)</span> from data, using the sample variance of the <span class="math inline">\(f(X_j)\)</span>.</p>
+</div>
+<div id="refined-error-bounds" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Refined error bounds<a href="monte-carlo-methods.html#refined-error-bounds" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math inline">\(e_N^{MC}=Z_N^{MC}-E(f(X))\)</span></p>
+<p>Recall Law of Large Numbers (LLN), <span class="math display">\[\lim_{N\to \infty}\frac1N\sum_{j=1}^{N}f(X_j)=E(f(X))\\ \implies \lim_{N\to \infty}Z_N^{MC}=E(f(X))\\ \implies \lim_{N\to \infty}e_N^{MC}=\lim_{N\to \infty}(Z_N^{MC}-E[f(X)])=0\]</span></p>
+<p>Note that this is true even if <span class="math inline">\(Var(f(X))=\infty\)</span></p>
+<p>Recall Central Limit Theorem (CLT),</p>
+<p><span class="math display">\[\frac{\sqrt{N}e_N^{MC}}{\sigma}=\frac{\sqrt N}{\sigma}(Z_N^{MC}-E[f(X)])\\=
+\frac{\sqrt N}{\sigma}(\frac1N \sum_{j=1}^{N}f(X_j)-\frac1N\sum_{j=1}^{N}E[f(X)])\\
+=\frac{1}{\sqrt N}\sum_{j=1}^{N}\frac{f(X_j)-E[f(X)]}{\sigma}\to^d N(0,1)\text{ as } N\to \infty\]</span></p>
+<p>where <span class="math inline">\(\sigma=\sqrt{Var(f(X_j))}=\sqrt{Var(f(X))}\)</span></p>
+<p>So, for large N (approximately):</p>
+<p><span class="math display">\[\frac{\sqrt N}{\sigma}e_N^{MC}\sim N(0,1)\\
+\implies e_N^{MC}\sim N(0, \frac{\sigma^2}{N})=N(0, (\frac{\sigma}{\sqrt N})^2)\]</span></p>
+<p>Hence, we can have:</p>
+<p><span class="math inline">\(P(|e_N^{MC}|&gt;1.96\frac{\sigma}{\sqrt N})= 5\%\)</span> or</p>
+<p><span class="math inline">\(P(E[f(X)]\in [Z_N^{MC}-1.96\frac{\sigma}{\sqrt N},Z_N^{MC}+1.96\frac{\sigma}{\sqrt N}])=95\%\)</span></p>
+</div>
+</div>
+<div id="variance-reduction-methods" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Variance reduction methods<a href="monte-carlo-methods.html#variance-reduction-methods" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="importance-sampling" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Importance sampling<a href="monte-carlo-methods.html#importance-sampling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="antithetic-variables" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Antithetic variables<a href="monte-carlo-methods.html#antithetic-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="control-variates" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> Control variates<a href="monte-carlo-methods.html#control-variates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simulating-statistical-models.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+},
+"repo": "https://github.com/shang-chieh0830/Statistical_Computing"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

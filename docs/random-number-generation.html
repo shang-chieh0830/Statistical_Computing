@@ -29,7 +29,7 @@ set in the _output.yml file.</p>" />
 <meta name="author" content="Shang-Chieh" />
 
 
-<meta name="date" content="2023-04-10" />
+<meta name="date" content="2023-04-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -167,6 +167,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.2" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#continuous-case"><i class="fa fa-check"></i><b>3.1.2</b> Continuous case</a></li>
 <li class="chapter" data-level="3.1.3" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#how-the-distribution-of-x_t-changes-as-t-changes"><i class="fa fa-check"></i><b>3.1.3</b> How the distribution of <span class="math inline">\(X_t\)</span> changes as t changes?</a></li>
 <li class="chapter" data-level="3.1.4" data-path="simulating-statistical-models.html"><a href="simulating-statistical-models.html#stationary-condition"><i class="fa fa-check"></i><b>3.1.4</b> Stationary Condition</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html"><i class="fa fa-check"></i><b>4</b> Monte Carlo methods</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#studying-models-via-simulation"><i class="fa fa-check"></i><b>4.1</b> Studying models via simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2</b> Monte Carlo estimates</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#computing-monte-carlo-estimates"><i class="fa fa-check"></i><b>4.2.1</b> Computing Monte Carlo estimates</a></li>
+<li class="chapter" data-level="4.2.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#monte-carlo-error-and-choice-of-sample-size"><i class="fa fa-check"></i><b>4.2.2</b> Monte Carlo error and Choice of sample size</a></li>
+<li class="chapter" data-level="4.2.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#refined-error-bounds"><i class="fa fa-check"></i><b>4.2.3</b> Refined error bounds</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#variance-reduction-methods"><i class="fa fa-check"></i><b>4.3</b> Variance reduction methods</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#importance-sampling"><i class="fa fa-check"></i><b>4.3.1</b> Importance sampling</a></li>
+<li class="chapter" data-level="4.3.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#antithetic-variables"><i class="fa fa-check"></i><b>4.3.2</b> Antithetic variables</a></li>
+<li class="chapter" data-level="4.3.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#control-variates"><i class="fa fa-check"></i><b>4.3.3</b> Control variates</a></li>
 </ul></li>
 </ul></li>
 <li class="divider"></li>
@@ -521,6 +537,7 @@ But fortunately, we can have extremely large period in R.</p>
 <p><span class="math inline">\(\vdots\)</span></p>
 <p><span class="math inline">\(P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)=1-z\)</span></p>
 <p><span class="math inline">\(P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X), X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}du\quad \boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{\mathcal R}p(x)\boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{A}p(x)g(x)dx\\\)</span></p>
+<p>(One thing to notice: <span class="math inline">\(\boldsymbol 1_{\{U\le p(X), X\in A\}}=\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}}\)</span>, This is because these two conditions must hold at the same time to get 1)</p>
 <p>Hence, <span class="math display">\[P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
 =\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
 = (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\

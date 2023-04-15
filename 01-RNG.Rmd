@@ -465,6 +465,8 @@ $P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)=1-z$
 $P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X), X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}du\quad \boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{\mathcal R}p(x)\boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{A}p(x)g(x)dx\\$
 
 
+(One thing to notice: $\boldsymbol 1_{\{U\le p(X), X\in A\}}=\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}}$, This is because these two conditions must hold at the same time to get 1)
+
 Hence, $$P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
 =\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
 = (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\

@@ -13,6 +13,8 @@ def:unlabeled-div-15
 exm:unlabeled-div-16
 exm:unlabeled-div-17
 exm:unlabeled-div-18
+def:unlabeled-div-19
+exm:unlabeled-div-20
 about
 random-number-generation
 pseudo-random-number-generators
@@ -30,3 +32,13 @@ discrete-case
 continuous-case
 how-the-distribution-of-x_t-changes-as-t-changes
 stationary-condition
+monte-carlo-methods
+studying-models-via-simulation
+monte-carlo-estimates
+computing-monte-carlo-estimates
+monte-carlo-error-and-choice-of-sample-size
+refined-error-bounds
+variance-reduction-methods
+importance-sampling
+antithetic-variables
+control-variates
