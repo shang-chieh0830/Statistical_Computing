@@ -39,7 +39,6 @@ computing-monte-carlo-estimates
 monte-carlo-error-and-choice-of-sample-size
 refined-error-bounds
 variance-reduction-methods
-importance-sampling
+importance-samplingis
 antithetic-variables
 control-variates
-importance-samplingis
