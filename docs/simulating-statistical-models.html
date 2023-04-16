@@ -181,7 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#variance-reduction-methods"><i class="fa fa-check"></i><b>4.3</b> Variance reduction methods</a>
 <ul>
 <li class="chapter" data-level="4.3.1" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#importance-samplingis"><i class="fa fa-check"></i><b>4.3.1</b> Importance sampling(IS)</a></li>
-<li class="chapter" data-level="4.3.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#antithetic-variables"><i class="fa fa-check"></i><b>4.3.2</b> Antithetic variables</a></li>
+<li class="chapter" data-level="4.3.2" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#antithetic-variables-av"><i class="fa fa-check"></i><b>4.3.2</b> Antithetic variables (AV)</a></li>
 <li class="chapter" data-level="4.3.3" data-path="monte-carlo-methods.html"><a href="monte-carlo-methods.html#control-variates"><i class="fa fa-check"></i><b>4.3.3</b> Control variates</a></li>
 </ul></li>
 </ul></li>
@@ -268,14 +268,14 @@ X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
 <span id="cb52-17"><a href="simulating-statistical-models.html#cb52-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;X[&quot;</span>, i, <span class="st">&quot;] = &quot;</span>, Xi, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
 <span id="cb52-18"><a href="simulating-statistical-models.html#cb52-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <pre><code>## X[1] = 1
-## X[2] = 1
+## X[2] = 2
 ## X[3] = 2
-## X[4] = 3
-## X[5] = 1
-## X[6] = 2
-## X[7] = 2
-## X[8] = 3
-## X[9] = 1
+## X[4] = 2
+## X[5] = 3
+## X[6] = 1
+## X[7] = 1
+## X[8] = 1
+## X[9] = 2
 ## X[10] = 2</code></pre>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="simulating-statistical-models.html#cb54-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">0</span>,</span>
 <span id="cb54-2"><a href="simulating-statistical-models.html#cb54-2" aria-hidden="true" tabindex="-1"></a>              <span class="dv">0</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>,</span>
@@ -300,9 +300,9 @@ X_n=\frac{X_{n-1}+X_{n-2}}{2}+\epsilon_n, \forall n\in \{2,3,...\}\]</span></p>
 <span id="cb54-21"><a href="simulating-statistical-models.html#cb54-21" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb54-22"><a href="simulating-statistical-models.html#cb54-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb54-23"><a href="simulating-statistical-models.html#cb54-23" aria-hidden="true" tabindex="-1"></a>X</span></code></pre></div>
-<pre><code>##   [1] 2 2 2 3 1 1 1 1 1 1 1 2 2 3 1 1 1 1 1 2 3 1 1 2 2 2 3 1 2 3 1 1 1 2 3 1 2
-##  [38] 3 1 1 2 3 1 1 2 3 1 2 2 3 1 1 1 2 2 2 2 2 3 1 2 2 3 1 1 2 3 1 1 2 3 1 2 2
-##  [75] 3 1 1 1 2 3 1 1 2 3 1 1 2 3 1 1 2 2 2 3 1 1 1 2 3 1</code></pre>
+<pre><code>##   [1] 1 1 1 1 2 3 1 2 3 1 1 2 3 1 1 1 2 3 1 1 1 1 1 2 2 3 1 2 3 1 2 2 2 2 3 1 2
+##  [38] 3 1 1 2 2 3 1 1 1 2 3 1 2 3 1 2 2 2 3 1 1 1 2 2 2 3 1 2 2 2 3 1 2 2 3 1 2
+##  [75] 2 3 1 1 1 2 3 1 2 3 1 1 1 2 2 2 3 1 2 3 1 2 2 3 1 2</code></pre>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="simulating-statistical-models.html#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(X, <span class="at">type=</span><span class="st">&quot;b&quot;</span>)</span></code></pre></div>
 <p><img src="02-Markov_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="simulating-statistical-models.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(X, <span class="at">main =</span> <span class="cn">NULL</span>)</span></code></pre></div>

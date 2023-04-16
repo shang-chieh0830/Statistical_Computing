@@ -15,6 +15,7 @@ exm:unlabeled-div-17
 exm:unlabeled-div-18
 def:unlabeled-div-19
 exm:unlabeled-div-20
+exm:unlabeled-div-21
 about
 random-number-generation
 pseudo-random-number-generators
@@ -40,5 +41,5 @@ monte-carlo-error-and-choice-of-sample-size
 refined-error-bounds
 variance-reduction-methods
 importance-samplingis
-antithetic-variables
+antithetic-variables-av
 control-variates

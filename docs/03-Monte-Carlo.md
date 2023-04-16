@@ -52,7 +52,7 @@ mean(sin(X))
 ```
 
 ```
-## [1] 0.5097557
+## [1] 0.5090866
 ```
 
 
@@ -82,7 +82,7 @@ mean(f.of.X)
 ```
 
 ```
-## [1] 0.135602
+## [1] 0.136618
 ```
 
 
@@ -120,7 +120,7 @@ mean(f.of.X)
 ```
 
 ```
-## [1] 6.332839
+## [1] 6.333237
 ```
 
 Analytic solution:
@@ -310,7 +310,7 @@ mean(f(X))
 ```
 
 ```
-## [1] 0.02101458
+## [1] 0.02114963
 ```
 
 ```r
@@ -319,7 +319,7 @@ RMSE.MC
 ```
 
 ```
-## [1] 0.0001168766
+## [1] 0.0001175297
 ```
 
 
@@ -364,7 +364,7 @@ mean(f(Y)*phi(Y)/ psi(Y))
 ```
 
 ```
-## [1] 0.02105943
+## [1] 0.02117051
 ```
 
 ```r
@@ -373,7 +373,7 @@ RMSE.IS
 ```
 
 ```
-## [1] 3.105984e-05
+## [1] 3.119081e-05
 ```
 
 ```r
@@ -381,11 +381,179 @@ RMSE.MC/RMSE.IS
 ```
 
 ```
-## [1] 3.762949
+## [1] 3.768086
 ```
 
 
 
-### Antithetic variables
+### Antithetic variables (AV)
+
+Recall: $Z_N^{MC}=\frac 1N \sum_{j=1}^{N}f(X_j)\approx E(f(X))$, where $X_j$ are i.i.d. copies of $X$
+
+We give up independence in this section.
+
+$E(Z_N^{MC})=E(\frac 1N \sum_{j=1}^{N}f(X_j))=\frac 1N \sum_{j=1}^{N}E(f(X_j))=E(f(X))$
+
+So unbiasedness still holds w/o independence assumption.
+
+Recall: 
+
+- $Var(X_1+X_2)=Var(X_1)+Var(X_2)+2Cov(X_1, X_2)$
+
+- $Var(X)=Cov(X, X)$
+
+- $Cov(aX, Y)= aCov(X, Y)$
+
+- $Cov(X+Y, Z)=Cov(X, Z)+Cov(Y, Z)$
+
+- $Cov(X, Y)= Cov(Y, X)$
+
+$Var(Z_N^{MC})=Var(\frac 1N \sum_{j=1}^{N}f(X_j))=\frac{1}{N^2}Var(\sum_{j=1}^{N}f(X_j))$
+
+The error will be smaller, if the covariance therm is negative.
+
+$Var(\sum_{j=1}^{N}f(X_j))=Cov(\sum_{j=1}^{N}f(X_j), \sum_{k=1}^{N}f(X_k))=\sum_{j=1}^{N}\sum_{k=1}^{N}Cov(f(X_j), f(X_k))\\=\sum_{j=1}^{N}Var(f(X_j))+2\sum_{k=1}^{N-1}\sum_{j=k+1}^{N}Cov(f(X_j), f(X_k))$
+
+Note:
+
+- $\sum_{j=1}^{N}Var(f(X_j))$ is the diagonal term, and is the same as standard MC.
+
+- $\sum_{k=1}^{N-1}\sum_{j=k+1}^{N}Cov(f(X_j), f(X_k))$ is the lower triangle term (if you put $j$ on the horizontal axis, and $k$ on vertical axis.)
+
+- By symmetry, we need to multiply $\sum_{k=1}^{N-1}\sum_{j=k+1}^{N}Cov(f(X_j), f(X_k))$ by 2
+
+- Now, we want to make $2\sum_{k=1}^{N-1}\sum_{j=k+1}^{N}Cov(f(X_j), f(X_k))$ negative. But it is difficult to have all pairwise covariances negative for more than two variables. Hence, we give in, and we only want to have pairs with negative covariance. These pairs are called antithetic pairs. In addition, we require that each pair is independent of all the other pairs.
+
+i.e., $(X_1, X_1'),....,(X_{N/2}',X_{N/2}')$, where each pair has $Cov(f(X_k), f(X_k)')\le 0$ and no correlation btw pairs. Also, all $X_k$ and all $X_k'$ have the same distribution as $X$ does (still identically distributed).
+
+With this in mind, we get $\sum_{k=1}^{N-1}\sum_{j=k+1}^{N}Cov(f(X_j), f(X_k))=Cov(f(X_1), f(X_1'))+...+Cov(f(X_{N/2}), f(X_{N/2}'))\\=\sum_{k=1}^{N}Cov(f(X_k), f(X_k'))=NCov(f(X), f(X'))$
+
+$MSE(Z_N^{AV})=\frac 1N Var(f(X))+\frac 1N Cov(f(X), f(X'))=\frac 1N Var(f(X))+\frac 1N Corr(f(X), f(X'))Var(f(X))\\ \implies MSE(Z_N^{AV})=\frac 1N Var(f(X))(1+\rho)=\frac 1N MSE(Z_N^{MC})(1+\rho)$
+
+So if $\rho$ is positive, the error actually gets larger.
+
+Note:
+
+- One can also write $Z^{AV}_N=\frac 1N \sum_{k=1}^{N/2}(f(X_k)+f(X_k'))$
+
+- $Corr(X,Y)=\frac{Cov(X,Y)}{\sqrt{Var(X)Var(Y)}}$
+
+:::{.example}
+
+Consider $U\sim U(0,1)$, then $U'=1-U\sim U(0,1)$
+
+$\rho=corr(U,U')=-1$
+
+$E(U)=1/2$ (analytic solution)
+
+$Z_N^{AV}=\frac 1N\sum_{k=1}^{N/2}(U+(1-U))=\frac 1N \frac N2=\frac 12$ (exactly equals analytic solution)
+
+What about $E(U^2)$?
+
+$Z_N^{AV}=\frac 1N\sum_{j=1}^{N}(U^2+(1-U)^2)$
+
+
+```r
+# aim: estimate E(U^2) where U ~ U(0,1)
+# using an Antithetic Variables (AV) estimates
+
+# for comparison: Monte Carlo estimates
+
+N <- 1e6
+U <- runif(N)
+mean(U^2)
+```
+
+```
+## [1] 0.3334618
+```
+
+```r
+RMSE.MC <- sqrt(var(U^2)/N)
+RMSE.MC
+```
+
+```
+## [1] 0.0002982342
+```
+
+```r
+# AV estimate
+
+M <- N/2
+U <- runif(M)
+U.prime <- 1-U
+
+cor(U^2, U.prime^2)
+```
+
+```
+## [1] -0.8753042
+```
+
+```r
+sum(U^2 + U.prime^2)/N # quite close
+```
+
+```
+## [1] 0.3334513
+```
+
+```r
+RMSE.AV <- sqrt(var(U^2) / N * (1+cor(U^2, U.prime^2)))
+RMSE.AV
+```
+
+```
+## [1] 0.0001053665
+```
+
+
+
+```r
+par(mfrow=c(2,1))
+hist(U)
+hist(U.prime)
+```
+
+<img src="03-Monte-Carlo_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+```r
+par(mfrow=c(1,1))
+```
+
+
+:::
+
+
+$\underline{Lemma}$: Let $g:\mathcal{R}\to \mathcal{R}$ be monotonically increasing and $U\sim U(0,1)$ Then $Cov(g(U), g(1-U))\le 0$
+
+(Note: usually in our cases, we have $g:[0,1]\to \mathcal{R}$ be monotonically increasing)
+
+:::{.proof}
+
+Let $V\sim U(0,1)$, independent of $U$
+
+- Case 1: $U\le V \implies g(U)\le g(V)$ and $g(1-U)\ge g(1-V)$
+
+
+- Case 2: $U>V \implies g(U)\ge g(V)$ and $g(1-U)\le g(1-V)$
+
+You can check that $(g(U)-g(V))(g(1-U)g(1-V))\le 0$ in either case.
+
+Goal: $Cov(g(U), g(1-U))\le 0$
+
+$$Cov(g(U), g(1-U))=E(g(U)g(1-U))-E(g(U))E(g(1-U))\\
+=E(g(V)g(1-V))-E(g(V))E(g(1-V))\\
+=\frac 12 (E(g(U)g(1-U))+E(g(V)g(1-V))-E(g(U))E(g(1-V)))-E(g(V))E(g(1-U))\\
+=\frac 12 E[g(U)g(1-U)+g(V)g(1-V)-g(U)g(1-V)-g(V)g(1-U)]\\
+=\frac 12 E[(g(U)-g(V))(g(1-U)-g(1-V))]\le 0$$
+
+Caution: $E(g(U)g(1-U))=E(g(V)g(1-V))\ne E(g(U)g(1-V))$. Recall that $U\perp V$
+
+Note: If $X\perp Y$, thern $E(XY)=E(X)E(Y) \implies E(g(U))E(g(1-V))=E[g(U)g(1-V)]$
+
+
+:::
 
 ### Control variates
