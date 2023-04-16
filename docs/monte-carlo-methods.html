@@ -237,7 +237,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb70-6"><a href="monte-carlo-methods.html#cb70-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, mu, sigma)</span>
 <span id="cb70-7"><a href="monte-carlo-methods.html#cb70-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-8"><a href="monte-carlo-methods.html#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">sin</span>(X))</span></code></pre></div>
-<pre><code>## [1] 0.5090866</code></pre>
+<pre><code>## [1] 0.5099003</code></pre>
 </div>
 <p><strong>Applications:</strong></p>
 <ol style="list-style-type: decimal">
@@ -254,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb72-7"><a href="monte-carlo-methods.html#cb72-7" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N)</span>
 <span id="cb72-8"><a href="monte-carlo-methods.html#cb72-8" aria-hidden="true" tabindex="-1"></a>f.of.X <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(X<span class="sc">&gt;=</span><span class="dv">1</span> <span class="sc">&amp;</span> X<span class="sc">&lt;=</span><span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
 <span id="cb72-9"><a href="monte-carlo-methods.html#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(f.of.X)</span></code></pre></div>
-<pre><code>## [1] 0.136618</code></pre>
+<pre><code>## [1] 0.135295</code></pre>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="monte-carlo-methods.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In fact, we can get the exact result</span></span>
 <span id="cb74-2"><a href="monte-carlo-methods.html#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb74-3"><a href="monte-carlo-methods.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pnorm</span>(<span class="dv">2</span>)<span class="sc">-</span><span class="fu">pnorm</span>(<span class="dv">1</span>)</span></code></pre></div>
@@ -273,7 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb76-4"><a href="monte-carlo-methods.html#cb76-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="dv">2</span>, <span class="dv">3</span>)</span>
 <span id="cb76-5"><a href="monte-carlo-methods.html#cb76-5" aria-hidden="true" tabindex="-1"></a>f.of.X <span class="ot">&lt;-</span> X<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>(<span class="dv">3-2</span>)</span>
 <span id="cb76-6"><a href="monte-carlo-methods.html#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(f.of.X)</span></code></pre></div>
-<pre><code>## [1] 6.333237</code></pre>
+<pre><code>## [1] 6.336415</code></pre>
 <p>Analytic solution:</p>
 <p><span class="math inline">\(\int_{2}^{3}x^2dx=\frac13x^3|^{3}_{x=2}=\frac133^3-\frac132^3=\frac1327-\frac138=9-\frac83=\frac{19}{3}\)</span></p>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="monte-carlo-methods.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="dv">19</span><span class="sc">/</span><span class="dv">3</span></span></code></pre></div>
@@ -387,10 +387,10 @@ for j=1,..,N:
 <span id="cb83-3"><a href="monte-carlo-methods.html#cb83-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e6</span></span>
 <span id="cb83-4"><a href="monte-carlo-methods.html#cb83-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N)</span>
 <span id="cb83-5"><a href="monte-carlo-methods.html#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">f</span>(X))</span></code></pre></div>
-<pre><code>## [1] 0.02114963</code></pre>
+<pre><code>## [1] 0.02100563</code></pre>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="monte-carlo-methods.html#cb85-1" aria-hidden="true" tabindex="-1"></a>RMSE.MC <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(<span class="fu">f</span>(X))<span class="sc">/</span>N)</span>
 <span id="cb85-2"><a href="monte-carlo-methods.html#cb85-2" aria-hidden="true" tabindex="-1"></a>RMSE.MC</span></code></pre></div>
-<pre><code>## [1] 0.0001175297</code></pre>
+<pre><code>## [1] 0.0001167092</code></pre>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="monte-carlo-methods.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># step 2: Importance Sampling estimate</span></span>
 <span id="cb87-2"><a href="monte-carlo-methods.html#cb87-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb87-3"><a href="monte-carlo-methods.html#cb87-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out=</span> <span class="dv">100</span>)</span>
@@ -419,12 +419,12 @@ for j=1,..,N:
 <span id="cb89-2"><a href="monte-carlo-methods.html#cb89-2" aria-hidden="true" tabindex="-1"></a>phi <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">dnorm</span>(x)</span>
 <span id="cb89-3"><a href="monte-carlo-methods.html#cb89-3" aria-hidden="true" tabindex="-1"></a>psi <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">dnorm</span>(x, <span class="dv">3</span>, <span class="fl">0.6</span>)</span>
 <span id="cb89-4"><a href="monte-carlo-methods.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">f</span>(Y)<span class="sc">*</span><span class="fu">phi</span>(Y)<span class="sc">/</span> <span class="fu">psi</span>(Y))</span></code></pre></div>
-<pre><code>## [1] 0.02117051</code></pre>
+<pre><code>## [1] 0.02108159</code></pre>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="monte-carlo-methods.html#cb91-1" aria-hidden="true" tabindex="-1"></a>RMSE.IS <span class="ot">&lt;-</span> <span class="fu">sqrt</span>( <span class="fu">var</span>(<span class="fu">f</span>(Y) <span class="sc">*</span> <span class="fu">phi</span>(Y) <span class="sc">/</span> <span class="fu">psi</span>(Y)) <span class="sc">/</span> N)</span>
 <span id="cb91-2"><a href="monte-carlo-methods.html#cb91-2" aria-hidden="true" tabindex="-1"></a>RMSE.IS</span></code></pre></div>
-<pre><code>## [1] 3.119081e-05</code></pre>
+<pre><code>## [1] 3.106608e-05</code></pre>
 <div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="monte-carlo-methods.html#cb93-1" aria-hidden="true" tabindex="-1"></a>RMSE.MC<span class="sc">/</span>RMSE.IS</span></code></pre></div>
-<pre><code>## [1] 3.768086</code></pre>
+<pre><code>## [1] 3.756804</code></pre>
 </div>
 <div id="antithetic-variables-av" class="section level3 hasAnchor" number="4.3.2">
 <h3><span class="header-section-number">4.3.2</span> Antithetic variables (AV)<a href="monte-carlo-methods.html#antithetic-variables-av" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -474,10 +474,10 @@ for j=1,..,N:
 <span id="cb95-6"><a href="monte-carlo-methods.html#cb95-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e6</span></span>
 <span id="cb95-7"><a href="monte-carlo-methods.html#cb95-7" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(N)</span>
 <span id="cb95-8"><a href="monte-carlo-methods.html#cb95-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(U<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
-<pre><code>## [1] 0.3334618</code></pre>
+<pre><code>## [1] 0.3335496</code></pre>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="monte-carlo-methods.html#cb97-1" aria-hidden="true" tabindex="-1"></a>RMSE.MC <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(U<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>N)</span>
 <span id="cb97-2"><a href="monte-carlo-methods.html#cb97-2" aria-hidden="true" tabindex="-1"></a>RMSE.MC</span></code></pre></div>
-<pre><code>## [1] 0.0002982342</code></pre>
+<pre><code>## [1] 0.0002982989</code></pre>
 <div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="monte-carlo-methods.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AV estimate</span></span>
 <span id="cb99-2"><a href="monte-carlo-methods.html#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb99-3"><a href="monte-carlo-methods.html#cb99-3" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> N<span class="sc">/</span><span class="dv">2</span></span>
@@ -485,12 +485,12 @@ for j=1,..,N:
 <span id="cb99-5"><a href="monte-carlo-methods.html#cb99-5" aria-hidden="true" tabindex="-1"></a>U.prime <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span>U</span>
 <span id="cb99-6"><a href="monte-carlo-methods.html#cb99-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb99-7"><a href="monte-carlo-methods.html#cb99-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(U<span class="sc">^</span><span class="dv">2</span>, U.prime<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
-<pre><code>## [1] -0.8753042</code></pre>
+<pre><code>## [1] -0.8748336</code></pre>
 <div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="monte-carlo-methods.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(U<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> U.prime<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span>N <span class="co"># quite close</span></span></code></pre></div>
-<pre><code>## [1] 0.3334513</code></pre>
+<pre><code>## [1] 0.3333303</code></pre>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="monte-carlo-methods.html#cb103-1" aria-hidden="true" tabindex="-1"></a>RMSE.AV <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(U<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> N <span class="sc">*</span> (<span class="dv">1</span><span class="sc">+</span><span class="fu">cor</span>(U<span class="sc">^</span><span class="dv">2</span>, U.prime<span class="sc">^</span><span class="dv">2</span>)))</span>
 <span id="cb103-2"><a href="monte-carlo-methods.html#cb103-2" aria-hidden="true" tabindex="-1"></a>RMSE.AV</span></code></pre></div>
-<pre><code>## [1] 0.0001053665</code></pre>
+<pre><code>## [1] 0.0001055881</code></pre>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="monte-carlo-methods.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
 <span id="cb105-2"><a href="monte-carlo-methods.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(U)</span>
 <span id="cb105-3"><a href="monte-carlo-methods.html#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(U.prime)</span></code></pre></div>
@@ -518,6 +518,74 @@ for j=1,..,N:
 </div>
 <div id="control-variates" class="section level3 hasAnchor" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> Control variates<a href="monte-carlo-methods.html#control-variates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><span class="math inline">\(E(f(X))=E(f(X)-g(X)+g(X))=E(f(X)-g(X))+E(g(X))\)</span>, where <span class="math inline">\(E(f(X)-g(X))\)</span> is estimated using Monte Carlo, and <span class="math inline">\(E(g(X))\)</span> has analytic solution (easy to compute).</p>
+<p><span class="math inline">\(Z^{CV}_N=\frac 1N \sum_{j=1}^{N}(f(X_j)-g(X_j))+E(g(X))\)</span></p>
+<div class="proposition">
+<p><span id="prp:unlabeled-div-23" class="proposition"><strong>Proposition 4.1  </strong></span><span class="math inline">\(MSE(Z_N^{CV})=\frac 1NVar(f(X)-g(X))\)</span></p>
+</div>
+<p>If <span class="math inline">\(f(X_j)\approx g(X_j)\)</span>, then <span class="math inline">\(f(X_j)-g(X_j)\)</span> will be small.
+In fact, we only need <span class="math inline">\(g(X)\approx f(X)\)</span> in the area where X actually takes values.</p>
+<div class="example">
+<p><span id="exm:unlabeled-div-24" class="example"><strong>Example 4.3  </strong></span><span class="math inline">\(X\sim N(0,1), E(cos(X))=?\)</span></p>
+<p>i.e., <span class="math inline">\(f(x)=cos(x)\)</span></p>
+<p>Note that since <span class="math inline">\(X\sim N(0,1)\)</span>, <span class="math inline">\(X\)</span> takes most values near 0, so we only need to find <span class="math inline">\(g(X)\)</span> which fits <span class="math inline">\(f(X)\)</span> well near 0.</p>
+<p>Recall:</p>
+<ul>
+<li><p><span class="math inline">\(cos(0)=1, cos&#39;(0)=-sin(0)=0, cos&#39;&#39;(0)=-cos(0)=-1\)</span></p></li>
+<li><p>Taylor expansion: <span class="math inline">\(f(x+h)\approx f(x)+hf&#39;(x)+\frac{h^2}{2}f&#39;&#39;(x)+...\)</span></p></li>
+<li><p><span class="math inline">\(cos(x)\approx cos(0)+xcos&#39;(0)+\frac{x^2}{2}cos&#39;&#39;(0)=1-\frac{x^2}{2}\)</span></p></li>
+</ul>
+<p>Hence, choose <span class="math inline">\(g(x)=1-\frac{x^2}{2}\)</span></p>
+<p>Since <span class="math inline">\(E(X)=0, Var(X)=E(X^2)=1\)</span>, we get <span class="math inline">\(E(g(X))=1-\frac{E(X^2)}{2}=1-\frac 12=\frac 12\)</span></p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="monte-carlo-methods.html#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># aim: estimate E(cos(X)), where X ~ N(0,1)</span></span>
+<span id="cb107-2"><a href="monte-carlo-methods.html#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using the Control Variates Method</span></span>
+<span id="cb107-3"><a href="monte-carlo-methods.html#cb107-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-4"><a href="monte-carlo-methods.html#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="co"># for comparison: standard Monte Carlo</span></span>
+<span id="cb107-5"><a href="monte-carlo-methods.html#cb107-5" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e6</span></span>
+<span id="cb107-6"><a href="monte-carlo-methods.html#cb107-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N)</span>
+<span id="cb107-7"><a href="monte-carlo-methods.html#cb107-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">cos</span>(X))</span></code></pre></div>
+<pre><code>## [1] 0.6063134</code></pre>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="monte-carlo-methods.html#cb109-1" aria-hidden="true" tabindex="-1"></a>RMSE.MC <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(<span class="fu">cos</span>(X))<span class="sc">/</span>N)</span>
+<span id="cb109-2"><a href="monte-carlo-methods.html#cb109-2" aria-hidden="true" tabindex="-1"></a>RMSE.MC</span></code></pre></div>
+<pre><code>## [1] 0.0004472972</code></pre>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="monte-carlo-methods.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using Control Variates</span></span>
+<span id="cb111-2"><a href="monte-carlo-methods.html#cb111-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="dv">1</span><span class="sc">-</span>x<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb111-3"><a href="monte-carlo-methods.html#cb111-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-4"><a href="monte-carlo-methods.html#cb111-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>,<span class="dv">3</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb111-5"><a href="monte-carlo-methods.html#cb111-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mai=</span><span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb111-6"><a href="monte-carlo-methods.html#cb111-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">cos</span>(x), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
+<span id="cb111-7"><a href="monte-carlo-methods.html#cb111-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">g</span>(x), <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="03-Monte-Carlo_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="monte-carlo-methods.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">cos</span>(X)<span class="sc">-</span><span class="fu">g</span>(X)) <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] 0.6067752</code></pre>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="monte-carlo-methods.html#cb114-1" aria-hidden="true" tabindex="-1"></a>RMSE.CV <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(<span class="fu">cos</span>(X)<span class="sc">-</span><span class="fu">g</span>(X))<span class="sc">/</span>N)</span>
+<span id="cb114-2"><a href="monte-carlo-methods.html#cb114-2" aria-hidden="true" tabindex="-1"></a>RMSE.CV</span></code></pre></div>
+<pre><code>## [1] 0.0003059437</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="monte-carlo-methods.html#cb116-1" aria-hidden="true" tabindex="-1"></a>RMSE.CV<span class="sc">/</span>RMSE.MC</span></code></pre></div>
+<pre><code>## [1] 0.683983</code></pre>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="monte-carlo-methods.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, <span class="fu">cos</span>(x)<span class="sc">-</span><span class="fu">g</span>(x), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="03-Monte-Carlo_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="monte-carlo-methods.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(<span class="fu">cos</span>(X)<span class="sc">-</span><span class="fu">g</span>(X))</span></code></pre></div>
+<pre><code>## [1] 0.09360154</code></pre>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="monte-carlo-methods.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(<span class="fu">cos</span>(X))</span></code></pre></div>
+<pre><code>## [1] 0.2000748</code></pre>
+</div>
+<p>Let’s consider a generalization of the control variate method.</p>
+<p>Assume two r.v.’s <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> such that:</p>
+<ul>
+<li><p><span class="math inline">\(Corr(X,Y)\ne 0\)</span></p></li>
+<li><p><span class="math inline">\(E(Y)\)</span> is known</p></li>
+</ul>
+<p>Write <span class="math inline">\(X=X-cY+cY\implies E(X)=E(X-cY)+cE(Y)\)</span></p>
+<p>Again <span class="math inline">\(E(Y)\)</span> is known, and we will use MC to estimate <span class="math inline">\(E(X-cY)\)</span>. Also we choose <span class="math inline">\(c\)</span> such that MSE is minimized.</p>
+<p><span class="math inline">\(Z^{CV}_N=\frac 1N \sum_{j=1}^{N}(X_j-cY_j)+cE(Y)\)</span>, where <span class="math inline">\((X_j, Y_j)\)</span> are i.i.d. copies of <span class="math inline">\((X,Y)\)</span></p>
+<p><span class="math inline">\(MSE(Z^{CV}_N)=\frac 1N Var(X-cY)=\frac 1N Cov(X-cY, X-cY)\)</span></p>
+<p><span class="math inline">\(Cov(X-cY, X-cY)=Cov(X,X)-2cxCov(X,Y)+c^2Cov(Y,Y)\\=Var(X)-2cCov(X,Y)+c^2Var(Y):=v(c)\)</span></p>
+<p>Hence we need to find c which minimizes <span class="math inline">\(Var(X-cY)=v(c)\)</span></p>
+<p><span class="math inline">\(v(c)=Var(X)-2cCov(X,Y)+c^2Var(Y)\)</span></p>
+<p><span class="math inline">\(v&#39;(c)=-2Cov(X,Y)+2cVar(Y)\)</span></p>
+<p><span class="math inline">\(v&#39;&#39;(c)=2Var(Y)&gt;0\)</span></p>
+<p>So, set <span class="math inline">\(v&#39;(c)=0\implies -2Cov(X,Y)+2cVar(Y)=0\implies c=\frac{Cov(X,Y)}{Var(Y)}\)</span></p>
 
 </div>
 </div>

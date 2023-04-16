@@ -52,7 +52,7 @@ mean(sin(X))
 ```
 
 ```
-## [1] 0.5090866
+## [1] 0.5099003
 ```
 
 
@@ -82,7 +82,7 @@ mean(f.of.X)
 ```
 
 ```
-## [1] 0.136618
+## [1] 0.135295
 ```
 
 
@@ -120,7 +120,7 @@ mean(f.of.X)
 ```
 
 ```
-## [1] 6.333237
+## [1] 6.336415
 ```
 
 Analytic solution:
@@ -310,7 +310,7 @@ mean(f(X))
 ```
 
 ```
-## [1] 0.02114963
+## [1] 0.02100563
 ```
 
 ```r
@@ -319,7 +319,7 @@ RMSE.MC
 ```
 
 ```
-## [1] 0.0001175297
+## [1] 0.0001167092
 ```
 
 
@@ -364,7 +364,7 @@ mean(f(Y)*phi(Y)/ psi(Y))
 ```
 
 ```
-## [1] 0.02117051
+## [1] 0.02108159
 ```
 
 ```r
@@ -373,7 +373,7 @@ RMSE.IS
 ```
 
 ```
-## [1] 3.119081e-05
+## [1] 3.106608e-05
 ```
 
 ```r
@@ -381,7 +381,7 @@ RMSE.MC/RMSE.IS
 ```
 
 ```
-## [1] 3.768086
+## [1] 3.756804
 ```
 
 
@@ -465,7 +465,7 @@ mean(U^2)
 ```
 
 ```
-## [1] 0.3334618
+## [1] 0.3335496
 ```
 
 ```r
@@ -474,7 +474,7 @@ RMSE.MC
 ```
 
 ```
-## [1] 0.0002982342
+## [1] 0.0002982989
 ```
 
 ```r
@@ -488,7 +488,7 @@ cor(U^2, U.prime^2)
 ```
 
 ```
-## [1] -0.8753042
+## [1] -0.8748336
 ```
 
 ```r
@@ -496,7 +496,7 @@ sum(U^2 + U.prime^2)/N # quite close
 ```
 
 ```
-## [1] 0.3334513
+## [1] 0.3333303
 ```
 
 ```r
@@ -505,7 +505,7 @@ RMSE.AV
 ```
 
 ```
-## [1] 0.0001053665
+## [1] 0.0001055881
 ```
 
 
@@ -557,3 +557,156 @@ Note: If $X\perp Y$, thern $E(XY)=E(X)E(Y) \implies E(g(U))E(g(1-V))=E[g(U)g(1-V
 :::
 
 ### Control variates
+
+$E(f(X))=E(f(X)-g(X)+g(X))=E(f(X)-g(X))+E(g(X))$, where $E(f(X)-g(X))$ is estimated using Monte Carlo, and $E(g(X))$ has analytic solution (easy to compute).
+
+$Z^{CV}_N=\frac 1N \sum_{j=1}^{N}(f(X_j)-g(X_j))+E(g(X))$
+
+
+
+:::{.proposition}
+
+$MSE(Z_N^{CV})=\frac 1NVar(f(X)-g(X))$
+
+:::
+
+If $f(X_j)\approx g(X_j)$, then $f(X_j)-g(X_j)$ will be small.
+In fact, we only need $g(X)\approx f(X)$ in the area where X actually takes values.
+
+
+:::{.example}
+
+$X\sim N(0,1), E(cos(X))=?$
+
+i.e., $f(x)=cos(x)$
+
+Note that since $X\sim N(0,1)$, $X$ takes most values near 0, so we only need to find $g(X)$ which fits $f(X)$ well near 0.
+
+Recall:
+
+- $cos(0)=1, cos'(0)=-sin(0)=0, cos''(0)=-cos(0)=-1$
+
+- Taylor expansion: $f(x+h)\approx f(x)+hf'(x)+\frac{h^2}{2}f''(x)+...$
+
+- $cos(x)\approx cos(0)+xcos'(0)+\frac{x^2}{2}cos''(0)=1-\frac{x^2}{2}$
+
+Hence, choose $g(x)=1-\frac{x^2}{2}$
+
+Since $E(X)=0, Var(X)=E(X^2)=1$, we get $E(g(X))=1-\frac{E(X^2)}{2}=1-\frac 12=\frac 12$
+
+
+```r
+# aim: estimate E(cos(X)), where X ~ N(0,1)
+# using the Control Variates Method
+
+# for comparison: standard Monte Carlo
+N <- 1e6
+X <- rnorm(N)
+mean(cos(X))
+```
+
+```
+## [1] 0.6063134
+```
+
+```r
+RMSE.MC <- sqrt(var(cos(X))/N)
+RMSE.MC
+```
+
+```
+## [1] 0.0004472972
+```
+
+```r
+# using Control Variates
+g <- function(x) 1-x^2/2
+
+x <- seq(-3,3, length.out = 100)
+par(mai=c(0.9, 0.9, 0.1, 0.1))
+plot(x, cos(x), type="l")
+lines(x, g(x), col="red")
+```
+
+<img src="03-Monte-Carlo_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
+```r
+mean(cos(X)-g(X)) + 1/2
+```
+
+```
+## [1] 0.6067752
+```
+
+```r
+RMSE.CV <- sqrt(var(cos(X)-g(X))/N)
+RMSE.CV
+```
+
+```
+## [1] 0.0003059437
+```
+
+```r
+RMSE.CV/RMSE.MC
+```
+
+```
+## [1] 0.683983
+```
+
+
+
+```r
+plot(x, cos(x)-g(x), type="l")
+```
+
+<img src="03-Monte-Carlo_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+
+```r
+var(cos(X)-g(X))
+```
+
+```
+## [1] 0.09360154
+```
+
+```r
+var(cos(X))
+```
+
+```
+## [1] 0.2000748
+```
+
+
+:::
+
+Let's consider a generalization of the control variate method.
+
+Assume two r.v.'s $X$ and $Y$ such that:
+
+- $Corr(X,Y)\ne 0$
+
+- $E(Y)$ is known
+
+Write $X=X-cY+cY\implies E(X)=E(X-cY)+cE(Y)$
+
+Again $E(Y)$ is known, and we will use MC to estimate $E(X-cY)$. Also we choose $c$ such that MSE is minimized.
+
+$Z^{CV}_N=\frac 1N \sum_{j=1}^{N}(X_j-cY_j)+cE(Y)$, where $(X_j, Y_j)$ are i.i.d. copies of $(X,Y)$
+
+$MSE(Z^{CV}_N)=\frac 1N Var(X-cY)=\frac 1N Cov(X-cY, X-cY)$
+
+$Cov(X-cY, X-cY)=Cov(X,X)-2cxCov(X,Y)+c^2Cov(Y,Y)\\=Var(X)-2cCov(X,Y)+c^2Var(Y):=v(c)$
+
+Hence we need to find c which minimizes $Var(X-cY)=v(c)$
+
+$v(c)=Var(X)-2cCov(X,Y)+c^2Var(Y)$
+
+$v'(c)=-2Cov(X,Y)+2cVar(Y)$
+
+$v''(c)=2Var(Y)>0$
+
+So, set $v'(c)=0\implies -2Cov(X,Y)+2cVar(Y)=0\implies c=\frac{Cov(X,Y)}{Var(Y)}$
+

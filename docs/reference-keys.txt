@@ -16,6 +16,8 @@ exm:unlabeled-div-18
 def:unlabeled-div-19
 exm:unlabeled-div-20
 exm:unlabeled-div-21
+prp:unlabeled-div-23
+exm:unlabeled-div-24
 about
 random-number-generation
 pseudo-random-number-generators
