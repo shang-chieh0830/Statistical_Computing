@@ -31,7 +31,7 @@ Then $$\lim_{N\to \infty}\frac1N \sum_{j=1}^{N}f(X_j)=E[f(X)]$$
 
 1. Use $E(X)=\int x\phi(x)dx$ and try to numerically approximate the integral, this relates to numerical analysis and will not be covered here.
 
-2. $E(f(X))=\lim_{N\to \infty}\frac1N \sum_{j=1}^{N}f(X_j)\\ \approx \frac1N \sum_{j=1}^{N}f(X_j)$ for a large N
+2. $E(f(X))=\lim_{N\to \infty}\frac1N \sum_{j=1}^{N}f(X_j) \approx \frac1N \sum_{j=1}^{N}f(X_j)$ for a large N
 
 i.e., $Z^{MC}_N=\frac1N\sum_{j=1}^{N}f(X_j)$, where $X_j$, j=1,...,N are i.i.d. copies of $X$, then $Z^{MC}_N\approx E[f(X)]$
 
@@ -90,9 +90,7 @@ Choose $X\sim U(a,b)\implies \phi(x)=\begin{cases}\frac{1}{b-a} & \text{ if } x\
 
 $E(f(X))=\int f(x)\phi(x)dx=\int_a^b h(x)dx$
 
-Also, $f(x)\phi(x)= f(x)\boldsymbol 1_{[a,b]}\frac{1}{b-a}=f(x)\frac{1}{b-a} \forall x \in [a,b]$
-
-$\implies f(x)=h(x)(b-a)$
+Also, $f(x)\phi(x)= f(x)\boldsymbol 1_{[a,b]}\frac{1}{b-a}=f(x)\frac{1}{b-a} \forall x \in [a,b] \implies f(x)=h(x)(b-a)$
 
 So, if $X\sim U(a,b)$, then $\int_a^b h(x)dx=E((b-a)h(X))\approx \frac1N \sum_{j=1}^{N}(b-a)h(X_j)$, where $X_j\sim U(a,b)$ are i.i.d.
 
@@ -108,7 +106,7 @@ mean(f.of.X)
 
 Analytic solution:
 
-$\int_{2}^{3}x^2dx=\frac13x^3|^{3}_{x=2}=\frac133^3-\frac132^3\\=\frac1327-\frac138=9-\frac83=\frac{19}{3}$
+$\int_{2}^{3}x^2dx=\frac13x^3|^{3}_{x=2}=\frac133^3-\frac132^3=\frac1327-\frac138=9-\frac83=\frac{19}{3}$
 
 ```{r}
 19/3
@@ -145,7 +143,7 @@ The downside is that the `for loop` in R is relatively slow, so there's a trade-
 
 We will also need to compute the sample variance of the $f(X_j):$
 
-$s^2_{f(X_j)}=\frac{1}{N-1}\sum_{j=1}^{N}(f(X_j)-\bar{f(X)})^2\\=\frac{1}{N-1}\sum_{j=1}^{N}f(X_j)^2-\frac{N}{N-1}(\frac1N\sum_{j=1}^{N}f(X_j))^2$, where $\bar{f(X)}=\frac1N\sum_{j=1}^{N}f(X_j)$
+$s^2_{f(X_j)}=\frac{1}{N-1}\sum_{j=1}^{N}(f(X_j)-\bar{f(X)})^2=\frac{1}{N-1}\sum_{j=1}^{N}f(X_j)^2-\frac{N}{N-1}(\frac1N\sum_{j=1}^{N}f(X_j))^2$, where $\bar{f(X)}=\frac1N\sum_{j=1}^{N}f(X_j)$
 
 ```
 s <- 0
@@ -171,20 +169,20 @@ $Z_N^{MC}=\frac1N\sum_{j=1}^{N}f(X_j)\approx E(f(X))$
 
 - $MSE(Z_N^{MC})=E(Z_N^{MC}-E[f(X)]^2)=Var(Z_N^{MC})-bias(Z_N^{MC})^2$
 
-- $E(Z_N^{MC})=E(\frac1N\sum_{j=1}^{N}f(X_j))=\frac1N\sum_{j=1}^{N} E(f(X_j))=\frac1N\sum_{j=1}^{N} E(f(X))=\frac N N E(f(X))=E(f(X))$
+- $E(Z_N^{MC})=E(\frac1N\sum_{j=1}^{N}f(X_j))=\frac1N\sum_{j=1}^{N} E(f(X_j))=\\ \frac1N\sum_{j=1}^{N} E(f(X))=\frac N N E(f(X))=E(f(X))$
 
 In the above, we use the fact that $X_j$ are i.i.d copies of $X$
 
 Hence, we get $bias(Z_N^{MC})=0$, and $MSE(Z_N^{MC})=Var(Z_N^{MC})=std. error(Z_N^{MC})^2$
 
-- $Var(Z_N^{MC})=Var(\frac1N \sum_{j=1}^{N}f(X_j))=\\\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X_j))=\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X))=\frac1N Var(f(X))$
+- $Var(Z_N^{MC})=Var(\frac1N \sum_{j=1}^{N}f(X_j))\\=\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X_j))=\frac{1}{N^2}\sum_{j=1}^{N}Var(f(X))=\frac1N Var(f(X))$
 
 Hence, we get $MSE(Z_N^{MC})=Var(Z_N^{MC})=\frac1N Var(f(X))$
 
 - $RMSE(Z_N^{MC})=\sqrt{\frac{Var(f(X))}{N}}=\frac{std.error(Z_N^{MC})}{\sqrt{N}}$
 
 
-To achieve $RMSE(Z_N^{MC})\le \epsilon$, we need $\epsilon\ge RMSE(Z_N^{MC})\implies \epsilon^2\ge MSE(Z_N^{MC})=\frac1N Var(f(X))\\\implies N\ge \frac{Var(f(X))}{\epsilon^2}$
+To achieve $RMSE(Z_N^{MC})\le \epsilon$, we need $\epsilon\ge RMSE(Z_N^{MC})\\ \implies \epsilon^2\ge MSE(Z_N^{MC})=\frac1N Var(f(X))\\\implies N\ge \frac{Var(f(X))}{\epsilon^2}$
 
 We can estimate $Var(f(X))$ from data, using the sample variance of the $f(X_j)$.
 
@@ -219,7 +217,111 @@ $P(E[f(X)]\in [Z_N^{MC}-1.96\frac{\sigma}{\sqrt N},Z_N^{MC}+1.96\frac{\sigma}{\s
 
 ## Variance reduction methods
 
-### Importance sampling
+### Importance sampling(IS)
+
+Recall: $Z^{MC}_N=\frac1N\sum_{j=1}^{N}f(X_j)\approx E(f(X))$, where $X_j$ are i.i.d. copies of $X$
+
+Let $\phi$ be the density of $X$ and $\psi$ be the density of $Y$
+
+$E(f(X))=\int f(x)\phi(x)dx=\int f(x)\frac{\phi(x)}{\psi(x)}\psi(x)dx=E(\frac{f(Y)\phi(Y)}{\psi(Y)})$
+
+$Z_N^{IS}=\frac 1N \sum_{j=1}^{N}f(y_j)\frac{\phi(y_j)}{\psi(y_j)}$, where $Y_j$ are i.i.d. copies of $Y$
+
+Recall: $MSE(Z_N)=Var(Z_N)+bias(Z_N)^2=Var(Z_N)$
+
+We know $MSE(Z_N^{MC})=\frac{Var(f(X))}{N}$
+
+
+$Var(Z_N^{IS})=Var(\frac 1N \sum_{j=1}^{N}\frac{f(Y_j)\phi(Y_j)}{\psi(Y_j)})=\frac{1}{N^2}\sum_{j=1}^{N}Var(\frac{f(Y_j)\phi(Y_j)}{\psi(Y_j)})$
+
+
+
+(Note that:  
+
+$E(\frac{f(Y_j)^2\phi(Y_j)^2}{\psi(Y_j)^2})=\int \frac{f(Y_j)^2\phi(Y_j)^2}{\psi(Y_j)^2}\psi(Y_j)dy=\int \frac{f(Y)^2\phi(Y)}{\psi(Y)}\phi(Y)dy=E(\frac{f(X)^2\phi(X)}{\psi(X)})$ and
+
+$E(\frac{f(Y)\phi(Y)}{\psi(Y)})^2=E(f(X))^2$
+
+thus, we have $Var(\frac{f(Y_j)\phi(Y_j)}{\psi(Y_j)})=E(f(X)^2\frac{\phi(X)}{\psi(X)})-E(f(X))^2\\=E(f(X)^2)-E(f(X))^2-E(f(X)^2)+E(f(X)^2\frac{\phi(X)}{\psi(X)})\\=Var(f(X))-E(f(X)^2(1-\frac{\phi(X)}{\psi(X)}))$
+
+
+)
+
+So, we get $Var(Z_N^{IS})=\frac{1}{N^2}\sum_{j=1}^{N}Var(\frac{f(Y_j)\phi(Y_j)}{\psi(Y_j)})=\frac 1N[Var(f(X))-E(f(X)^2(1-\frac{\phi(X)}{\psi(X)}))]$
+
+In sum, 
+
+$MSE(Z_N^{MC})=\frac 1N Var(f(X))$
+
+$MSE(Z_N^{IS})=\frac 1NVar(f(Y)\frac{\phi(Y)}{\psi(Y)})=\frac 1N Var(f(X))-\frac 1NE(f(X)^2(1-\frac{\phi(X)}{\psi(X)}))$
+
+If $\frac 1NE(f(X)^2(1-\frac{\phi(X)}{\psi(X)}))$ is positive, then the importance sampling estimates is better. The question now is which $Y$ should we choose to make this term positive.
+
+To do this, we want to make $\psi$ large, but note that $\psi$ is the density of $Y$, i.e., $\int \psi(x)dx=1$. Thus, when somewhere gets larger, somewhere else must get smaller, so now the real question is where should we make $\psi$ large (That's why we call it Importance sampling)
+
+Observing the term $E(f(X)^2(1-\frac{\phi(X)}{\psi(X)}))$. It turns out that we **make $\psi$ large where $f(X)^2$ is large**.
+
+```{r}
+# aim: estimate E(exp(-(X-3)^4)) where X ~ N(0,1)
+# using Importance Sampling
+
+f <- function(x) exp(-(x-3)^4)
+
+x <- seq(-5, 5, length.out= 100)
+par(mai=c(0.9, 0.9, 0.1, 0.1)) # mai = margin in inches
+plot(x, f(x), type="l")
+lines(x, dnorm(x), col="blue")
+
+```
+
+```{r}
+# step 1: standard Monte-Carlo estimation
+
+N <- 1e6
+X <- rnorm(N)
+mean(f(X))
+RMSE.MC <- sqrt(var(f(X))/N)
+RMSE.MC
+```
+
+```{r}
+# step 2: Importance Sampling estimate
+
+x <- seq(-5, 5, length.out= 100)
+par(mai=c(0.9, 0.9, 0.1, 0.1)) # mai = margin in inches
+plot(x, f(x), type="l")
+lines(x, dnorm(x), col="blue")
+
+lines(x, dnorm(x, 3), col="red")
+lines(x, dnorm(x, 3, 0.8), col="red")
+lines(x, dnorm(x, 3, 0.6), col="red")
+lines(x, dnorm(x, 3, 0.4), col="red")
+```
+
+```{r}
+# step 2: Importance Sampling estimate
+# we have to choose Y
+# here, we use Y ~ N(3, 0.6^2)
+
+x <- seq(-5, 5, length.out= 100)
+par(mai=c(0.9, 0.9, 0.1, 0.1)) # mai = margin in inches
+plot(x, f(x), type="l")
+lines(x, dnorm(x), col="blue")
+
+
+lines(x, dnorm(x, 3, 0.6), col="red")
+Y <- rnorm(N, 3, 0.6)
+phi <- function(x) dnorm(x)
+psi <- function(x) dnorm(x, 3, 0.6)
+mean(f(Y)*phi(Y)/ psi(Y))
+
+RMSE.IS <- sqrt( var(f(Y) * phi(Y) / psi(Y)) / N)
+RMSE.IS
+
+RMSE.MC/RMSE.IS
+```
+
+
 
 ### Antithetic variables
 
