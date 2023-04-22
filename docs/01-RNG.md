@@ -381,12 +381,14 @@ $F^{-1}(u):=inf\{x\in \mathcal R|F(x)\ge u  \}$
 
 Let $U\sim U(0,1), X=F^{-1}(u)$. Then
 
-$$P(X \le a)=P(F^{-1}(u)\le a)\\
-=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
-=P(F(a)\ge u)\\
-=P(u\le F(a))\\
-=\frac{F(a)-0}{1-0}\\
-=F(a)$$
+\begin{align}
+P(X \le a) &=P(F^{-1}(u)\le a)\\
+&=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
+&=P(F(a)\ge u)\\
+&=P(u\le F(a))\\
+&=\frac{F(a)-0}{1-0}\\
+&=F(a)
+\end{align}
 
 We use the facts that $inf\{x\in \mathcal R | F(x)\ge u\}\le a\iff F(a)\ge u$ and $U\sim U(0,1)$
 
@@ -398,9 +400,11 @@ Consider $X\sim Exp(\lambda)$
 
 $f(x)=\begin{cases} \lambda e^{-\lambda x} & x\ge 0 \\ 0 & x<0 \end{cases}$
 
-$\implies F(a)=P(X\le a)=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}$
+\begin{align}
+\implies F(a)=P(X\le a)&=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\&=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}
+\end{align}
 
-$u=F(x)=1-e^{-\lambda x}\\ \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}$
+$u=F(x)=1-e^{-\lambda x} \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}$
 
 
 
@@ -557,19 +561,28 @@ Note that $1=\int_{\mathcal R} \frac{1}{z}p(x)g(x)dx=\frac{1}{z}\int_{\mathcal R
 
 The probability of accepting $X_n$ is 
 
-$$P(X_n accepted)=P(U_n\le p(X_n))=\\
-=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
-=\int_{\mathcal R}p(x)g(x)dx=z$$
+\begin{align}
+P(X_n accepted)&=P(U_n\le p(X_n))\\
+&=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
+&=\int_{\mathcal R}p(x)g(x)dx=z
+\end{align}
 
 Note that $p(x)=\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du$ and $\boldsymbol 1_{\{U\le p(X)\}}=\begin{cases}1, & \text{if } U_n\le p(X_n)\\ 0, & o.w. \end{cases}$
 
 Now, we want to show $P(X_{N_k}\in A)=\int_{A}f(x)dx$
 
-$$P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}>p(X_{n+1}),...,\\ U_{n+m-1}>p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1}),..., U_{n+m-1}>p(X_{n+m-1})\\, U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)$$
+
+
+\begin{align*}
+&P(X_{N_k}\in A|N_{k-1}=n) \\
+&=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n) \\
+&=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n) \\
+&=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}>p(X_{n+1}),..., U_{n+m-1}>p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+&=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1}),..., U_{n+m-1}>p(X_{n+m-1}), U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
+&=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \\
+&\quad\times P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)
+\end{align*}
+
 
 The last equation come about b/c of independence.
 
@@ -587,13 +600,18 @@ $P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0
 
 (One thing to notice: $\boldsymbol 1_{\{U\le p(X), X\in A\}}=\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}}$, This is because these two conditions must hold at the same time to get 1)
 
-Hence, $$P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
-= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
-=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
-=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
-=\int_{A}\frac{1}{z}p(x)g(x)dx\\
-=\int_{A}f(x)dx$$, which is true independent of n
+Hence, 
+\begin{align*}
+P(X_{N_k}\in A|N_{k-1}=n)&=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+&=\sum_{m=1}^{\infty}P(U_{n+1}>p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ 
+&P(U_{n+m-1}>p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+&= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
+&=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
+&=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
+&=\int_{A}\frac{1}{z}p(x)g(x)dx\\
+&=\int_{A}f(x)dx
+\end{align*}
+, which is true independent of n
 
 Hence $P(X_{N_k}\in A)=\int_{A}f(x)dx$, i.e. $X_{N_k}$ has desity f.
 

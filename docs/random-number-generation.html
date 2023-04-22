@@ -403,19 +403,23 @@ But fortunately, we can have extremely large period in R.</p>
 <div class="proof">
 <p><span id="unlabeled-div-6" class="proof"><em>Proof</em>. </span><span class="math inline">\(F^{-1}(u):=inf\{x\in \mathcal R|F(x)\ge u \}\)</span></p>
 <p>Let <span class="math inline">\(U\sim U(0,1), X=F^{-1}(u)\)</span>. Then</p>
-<p><span class="math display">\[P(X \le a)=P(F^{-1}(u)\le a)\\
-=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
-=P(F(a)\ge u)\\
-=P(u\le F(a))\\
-=\frac{F(a)-0}{1-0}\\
-=F(a)\]</span></p>
+<p><span class="math display">\[\begin{align}
+P(X \le a) &amp;=P(F^{-1}(u)\le a)\\
+&amp;=P(inf\{x\in \mathcal R | F(x)\ge u\}\le a)\\
+&amp;=P(F(a)\ge u)\\
+&amp;=P(u\le F(a))\\
+&amp;=\frac{F(a)-0}{1-0}\\
+&amp;=F(a)
+\end{align}\]</span></p>
 <p>We use the facts that <span class="math inline">\(inf\{x\in \mathcal R | F(x)\ge u\}\le a\iff F(a)\ge u\)</span> and <span class="math inline">\(U\sim U(0,1)\)</span></p>
 </div>
 <div class="example">
 <p><span id="exm:unlabeled-div-7" class="example"><strong>Example 2.2  </strong></span>Consider <span class="math inline">\(X\sim Exp(\lambda)\)</span></p>
 <p><span class="math inline">\(f(x)=\begin{cases} \lambda e^{-\lambda x} &amp; x\ge 0 \\ 0 &amp; x&lt;0 \end{cases}\)</span></p>
-<p><span class="math inline">\(\implies F(a)=P(X\le a)=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}\)</span></p>
-<p><span class="math inline">\(u=F(x)=1-e^{-\lambda x}\\ \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}\)</span></p>
+<p><span class="math display">\[\begin{align}
+\implies F(a)=P(X\le a)&amp;=\int_{-\infty}^{a}f(x)dx=\int_{0}^{a}\lambda e^{-\lambda x}dx\\&amp;=(-e^{-\lambda x})|_{x=0}^{a}=-e^{-\lambda a}-(-e^{-\lambda 0})=1-e^{-\lambda a}
+\end{align}\]</span></p>
+<p><span class="math inline">\(u=F(x)=1-e^{-\lambda x} \iff e^{-\lambda x}=1-u \iff -\lambda x=log(1-u)\iff x=-\frac{log(1-u)}{\lambda}\)</span></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="random-number-generation.html#cb35-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
 <span id="cb35-2"><a href="random-number-generation.html#cb35-2" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">runif</span>(N)</span>
 <span id="cb35-3"><a href="random-number-generation.html#cb35-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">2</span></span>
@@ -521,16 +525,22 @@ But fortunately, we can have extremely large period in R.</p>
 </div>
 <div class="proof">
 <p><span id="unlabeled-div-9" class="proof"><em>Proof</em>. </span>The probability of accepting <span class="math inline">\(X_n\)</span> is</p>
-<p><span class="math display">\[P(X_n accepted)=P(U_n\le p(X_n))=\\
-=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
-=\int_{\mathcal R}p(x)g(x)dx=z\]</span></p>
+<p><span class="math display">\[\begin{align}
+P(X_n accepted)&amp;=P(U_n\le p(X_n))\\
+&amp;=\int_{\mathcal R}\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\quad g(x) dx\\
+&amp;=\int_{\mathcal R}p(x)g(x)dx=z
+\end{align}\]</span></p>
 <p>Note that <span class="math inline">\(p(x)=\int_{0}^{1}\boldsymbol 1_{\{U\le p(X)\}} du\)</span> and <span class="math inline">\(\boldsymbol 1_{\{U\le p(X)\}}=\begin{cases}1, &amp; \text{if } U_n\le p(X_n)\\ 0, &amp; o.w. \end{cases}\)</span></p>
 <p>Now, we want to show <span class="math inline">\(P(X_{N_k}\in A)=\int_{A}f(x)dx\)</span></p>
-<p><span class="math display">\[P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}&gt;p(X_{n+1}),...,\\ U_{n+m-1}&gt;p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1}),..., U_{n+m-1}&gt;p(X_{n+m-1})\\, U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\]</span></p>
+<p><span class="math display">\[\begin{align*}
+&amp;P(X_{N_k}\in A|N_{k-1}=n) \\
+&amp;=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n) \\
+&amp;=\sum_{m=1}^{\infty}P(X_{N_{n+m}}\in A, N_k=n+m|N_{k-1}=n) \\
+&amp;=\sum_{m=1}^{\infty}P(X_{n+m}\in A, U_{n+1}&gt;p(X_{n+1}),..., U_{n+m-1}&gt;p(X_{n+m-1}), U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+&amp;=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1}),..., U_{n+m-1}&gt;p(X_{n+m-1}), U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\
+&amp;=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \\
+&amp;\quad\times P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)
+\end{align*}\]</span></p>
 <p>The last equation come about b/c of independence.</p>
 <p>Now, observe:</p>
 <p><span class="math inline">\(P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)=1-z\)</span></p>
@@ -538,13 +548,18 @@ But fortunately, we can have extremely large period in R.</p>
 <p><span class="math inline">\(P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)=1-z\)</span></p>
 <p><span class="math inline">\(P(U_{n+m}\le p(X_{n+m}), X_{n+m}\in A|N_{k-1}=n)\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X), X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}} du\quad g(x)dx\\=\int_{\mathcal R}\int_{1}^{0}\boldsymbol 1_{\{U\le p(X)\}}du\quad \boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{\mathcal R}p(x)\boldsymbol 1_{\{ X\in A\}}g(x)dx\\=\int_{A}p(x)g(x)dx\\\)</span></p>
 <p>(One thing to notice: <span class="math inline">\(\boldsymbol 1_{\{U\le p(X), X\in A\}}=\boldsymbol 1_{\{U\le p(X)\}}\boldsymbol 1_{\{ X\in A\}}\)</span>, This is because these two conditions must hold at the same time to get 1)</p>
-<p>Hence, <span class="math display">\[P(X_{N_k}\in A|N_{k-1}=n)=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
-=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\ P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
-= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
-=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
-=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
-=\int_{A}\frac{1}{z}p(x)g(x)dx\\
-=\int_{A}f(x)dx\]</span>, which is true independent of n</p>
+<p>Hence,
+<span class="math display">\[\begin{align*}
+P(X_{N_k}\in A|N_{k-1}=n)&amp;=\sum_{m=1}^{\infty}P(X_{N_k}\in A, N_k=n+m|N_{k-1}=n)\\
+&amp;=\sum_{m=1}^{\infty}P(U_{n+1}&gt;p(X_{n+1})|N_{k-1}=n)\times \dots \times\\
+&amp;P(U_{n+m-1}&gt;p(X_{n+m-1})|N_{k-1}=n)P(X_{n+m}\in A, U_{n+m}\le p(X_{n+m})|N_{k-1}=n)\\
+&amp;= (\sum_{m=1}^{\infty}(1-z)^{m-1})\int_{A}p(x)g(x)dx\\
+&amp;=(\sum_{m=0}^{\infty}(1-z)^{m})\int_{A}p(x)g(x)dx\\
+&amp;=\frac{1}{1-(1-z)}\int_{A}p(x)g(x)dx\\
+&amp;=\int_{A}\frac{1}{z}p(x)g(x)dx\\
+&amp;=\int_{A}f(x)dx
+\end{align*}\]</span>
+, which is true independent of n</p>
 <p>Hence <span class="math inline">\(P(X_{N_k}\in A)=\int_{A}f(x)dx\)</span>, i.e. <span class="math inline">\(X_{N_k}\)</span> has desity f.</p>
 <p>Recall the fact that <span class="math inline">\(\sum_{m=0}^{\infty}a^m=\frac{1}{1-a},\forall |a|&lt;1\)</span></p>
 </div>
